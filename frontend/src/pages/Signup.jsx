@@ -1,12 +1,12 @@
 import React from "react";
-import img from "/src/components/Images/logo.png"; 
+//import img from "/src/components/Images/logo.png"; 
 export default function Signup() {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            src={img}
+            src={"https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"}
             alt="Your Company"
             className="mx-auto h-25 w-auto"
           />
