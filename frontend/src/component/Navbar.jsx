@@ -3,7 +3,7 @@ import image from "../Images/logo.png";
 
 export default function Navbar() {
   return (
-    <header className="bg-[#22977999]">
+    <header className="bg-[#BBDCE5]">
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8"

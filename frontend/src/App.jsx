@@ -1,9 +1,9 @@
 import Signup from "./pages/signup";
-import Navbar from "./component/Navbar";
+import Homepage from "./pages/Homepage";
 function App() {
   return (
     <>
-      <Navbar />
+      <Homepage />  
     </>
   );
 }
