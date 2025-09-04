@@ -4,9 +4,9 @@ export default function Signin() {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-  <div className="sm:mx-auto sm:w-full sm:max-w-[640px]">
+  <div className="sm:mx-auto  sm:w-full sm:max-w-[640px]">
     {/* Logo and Title Container */}
-    <div className="w-160  bg-[#aac9f2] px-0 py-6 h-58 flex-col justify-center  items-center ">
+    <div className="w-160  bg-[#BBDCE5] px-0 py-6 h-58 flex-col justify-center  items-center ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="630"
@@ -28,7 +28,7 @@ export default function Signin() {
         </div>
 
     {/* Form Container */}
-    <div className="mt-8 w-full">
+    <div className="mt-15 w-full">
       <form action="#" method="POST" className="space-y-6">
         {/* Email Input */}
         <div>
@@ -52,19 +52,14 @@ export default function Signin() {
 
         {/* Password Input */}
         <div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-10">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-900"
             >
               Password
             </label>
-            <a
-              href="#"
-              className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Forgot password?
-            </a>
+          
           </div>
           <div className="mt-2">
             <input
@@ -76,6 +71,12 @@ export default function Signin() {
               className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
             />
           </div>
+            <a
+              href="#"
+              className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            >
+              Forgot password?
+            </a>
         </div>
 
         {/* Submit Button */}
