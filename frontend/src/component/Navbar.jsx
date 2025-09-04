@@ -1,18 +1,20 @@
 import React from "react";
 import image from "../Images/logo.png";
+import option  from "../Images/option.png";
 
 export default function Navbar() {
   return (
     <header className="bg-[#BBDCE5]">
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8"
+        className="mx-auto flex max-w-8xl items-center justify-around p-2 lg:px-8"
       >
         {/* Logo Section */}
-        <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5 flex items-center">
-            <span className="sr-only">Alumni Sphere</span>
-            <img src={image} alt="Logo" className="h-12 w-auto" />
+        <div className="flex lg:flex-1 ">
+          <a href="#" className="-m-1.5 p-1.5 flex ">
+            <img src={option} alt="icon" className="h-10 w-10 mr-10 " />
+
+            <img src={image} alt="Logo" className="h-12 w-auto " />
           </a>
         </div>
 

@@ -46,6 +46,7 @@
 /* Divider */
 .divider {
   border-color: var(--color-divider);
+}
 /* Thin scrollbar */
 ::-webkit-scrollbar {
   height: 10px;   /* 👈 smaller height for horizontal scrollbar */
