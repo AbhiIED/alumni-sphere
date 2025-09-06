@@ -5,11 +5,11 @@ export default function Footer() {
   return (
     <footer className="bg-[#BBDCE5] text-dark py-12">
       <div className="max-w-7xl mx-auto px-3 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-        {/* Solutions */}
+        {/* Menu */}
         <div>
           <h3 className="text-white font-semibold mb-4">Menu</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-white">Alumni Directory</a></li>
+            <li><a href="#" className="hover:text-blue">Alumni Directory</a></li>
             <li><a href="#" className="hover:text-white">My Connections</a></li>
             <li><a href="#" className="hover:text-white">Feed</a></li>
             <li><a href="#" className="hover:text-white">Job</a></li>
@@ -27,14 +27,9 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Company */}
-        
-
-        {/* Legal */}
         
       </div>
 
-      {/* Newsletter */}
       <div className="max-w-2xl mx-auto mt-3 px-2 text-center">
         <p className="text-black-400 mt-2">
           Want to contact with us? 
