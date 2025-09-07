@@ -1,5 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
+
 export default function HeroSection() {
   return (
     <section className="bg-white py-16">
@@ -11,21 +12,21 @@ export default function HeroSection() {
           </h2>
         </div>
 
-    <div className="w-full max-w-md mx-auto mt-5">
-      <div className="relative">
-        {/* Search Icon */}
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <Search className="h-5 w-5 text-gray-400" />
-        </span>
+        <div className="w-full max-w-md mx-auto mt-5">
+          <div className="relative">
+            {/* Search Icon */}
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+              <Search className="h-5 w-5 text-gray-400" />
+            </span>
 
-        {/* Input Field */}
-        <input
-          type="text"
-          placeholder="Search by Graduation Year or Course name"
-          className="w-full rounded-xl border border-gray-600 pl-10 pr-4 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-        />
-      </div>
-    </div>
+            {/* Input Field */}
+            <input
+              type="text"
+              placeholder="Search by Graduation Year or Course name"
+              className="w-full rounded-xl border border-gray-600 pl-10 pr-4 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+          </div>
+        </div>
 
         {/* Horizontal Scrollable Team Members */}
         <div className="mt-12 overflow-x-auto">
@@ -44,7 +45,7 @@ export default function HeroSection() {
                 Michael Foster
               </h3>
               <p className="text-xs text-gray-600">MCA 2003</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -59,7 +60,7 @@ export default function HeroSection() {
                 Dries Vincent
               </h3>
               <p className="text-xs text-gray-600">CSE 1999</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -74,7 +75,7 @@ export default function HeroSection() {
                 Lindsay Walton
               </h3>
               <p className="text-xs text-gray-600">ECE 2005</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -89,7 +90,7 @@ export default function HeroSection() {
                 Courtney Henry
               </h3>
               <p className="text-xs text-gray-600">Civil 2015</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -104,7 +105,7 @@ export default function HeroSection() {
                 Tom Cook
               </h3>
               <p className="text-xs text-gray-600">Mtech 2001</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -119,7 +120,7 @@ export default function HeroSection() {
                 Whitney Francis
               </h3>
               <p className="text-xs text-gray-600">MCA 2015</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -134,7 +135,7 @@ export default function HeroSection() {
                 Leonard Krasner
               </h3>
               <p className="text-xs text-gray-600">MCA 2022</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
@@ -149,11 +150,12 @@ export default function HeroSection() {
                 Floyd Miles
               </h3>
               <p className="text-xs text-gray-600">IT 2020</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
-                        <li className="flex flex-col items-center text-center snap-center min-w-[120px]">
+
+            <li className="flex flex-col items-center text-center snap-center min-w-[120px]">
               <img
                 className="h-20 w-20 rounded-full object-cover shadow-sm"
                 src="https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
@@ -163,7 +165,7 @@ export default function HeroSection() {
                 Floyd Miles
               </h3>
               <p className="text-xs text-gray-600">EE 2022</p>
-              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-full shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button className="mt-2 px-3 py-1 text-xs font-medium text-white bg-[#cfab8d] rounded-full shadow hover:bg-[#896C6C] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#896C6C]">
                 Connect
               </button>
             </li>
