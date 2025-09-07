@@ -1,10 +1,11 @@
 import Signin from "./pages/Signin";
+import ManageAccount from "./pages/ManageAccount";
 
 function App() {
   return (
     <>
-  <Signin/>
-
+    <signin/>
+    <ManageAccount/>
     </>
   );
 }
