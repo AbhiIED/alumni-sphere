@@ -12,17 +12,17 @@ export default function Signin() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch("http://localhost:5000/api/auth/signin", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password }),
+});
+
 
       const data = await res.json();
 
       if (res.ok) {
         // success → go to homepage
-        //alert("Login successful!");
         navigate("/homepage");
       } else {
         setError(data.error || "Login failed");
