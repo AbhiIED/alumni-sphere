@@ -48,6 +48,7 @@ export default function ManageAccount() {
   };
 
   return (
+    <>
     <div className="h-screen w-screen bg-gray-50 flex justify-center items-center px-4 py-8 overflow-hidden">
       <div className="w-full max-w-6xl bg-white h-full p-6 overflow-y-auto shadow-lg rounded-2xl flex">
         {/* Left Side: Account Settings */}
@@ -195,5 +196,6 @@ export default function ManageAccount() {
         </div>
       </div>
     </div>
+    </>
   );
 }
