@@ -1,21 +1,49 @@
-import React from "react";
+import React,{useState} from "react";
 import image from "../Images/logo.png";
 
+import { User, Bell } from "lucide-react"; 
+
 export default function Navbar() {
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
   return (
     <header className="bg-[#BBDCE5]">
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8"
+        className="mx-auto flex max-w-8xl items-center justify-around p-2 lg:px-8"
       >
         {/* Logo Section */}
-        <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5 flex items-center">
-            <span className="sr-only">Alumni Sphere</span>
-            <img src={image} alt="Logo" className="h-12 w-auto" />
-          </a>
-        </div>
+        <div className="flex lg:flex-1 relative">
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="flex items-center gap-2 text-white hover:text-gray-200 bg-white p-2 rounded-full"
+          >
+            <Bell className="h-8 w-8 text-white" color="black" />
+            
+          </button>
+          <img src={image} alt="Logo" className="h-12 w-auto ml-8" />
 
+          {/* 🔔 Notification Dropdown */}
+          {showNotifications && (
+            <div className="absolute top-14 left-0 w-100 bg-white shadow-lg rounded-lg p-4 z-50">
+              <h3 className="text-lg font-bold text-gray-700 mb-2">Notifications</h3>
+              <ul className="space-y-2 text-n text-gray-600">
+                <li className="border-b pb-4">🎉 New event this weekend!</li>
+                <li className="border-b pb-4">👤 John Doe sent you a connection request.</li>
+                <li className="border-b pb-4">📰 New article in your feed.</li>
+                <li className="border-b pb-4">💼 New job posting available.</li>
+                <li className="border-b pb-4">📅 Reminder: Alumni meetup tomorrow.</li>
+                <li className="border-b pb-4">🔔 Your profile was viewed 5 times this week.</li>
+                <li className="border-b pb-4">✉️ You have 3 new messages.</li>
+                <li className="border-b pb-4">⭐ You received a new endorsement.</li>
+                <li className="border-b pb-4">📢 Announcement: New features added!</li>
+                <li className="text-indigo-600 cursor-pointer">View more →</li>
+              </ul>
+            </div>
+          )}
+        </div>
+        {/*MANIT LOGO LINK*/}
+        
         {/* Navigation Links */}
         <div className="hidden lg:flex lg:gap-x-1.5">
           <svg
@@ -108,11 +136,25 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Profile Section */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-base leading-6 font-semibold text-white text-lg">
-            Profile
-          </a>
+         {/* Profile Section */}
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end relative">
+          <button
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            className="flex items-center gap-2 text-white hover:text-gray-200 bg-white p-2 rounded-full"
+          >
+            <User className="h-8 w-8 " color="black" />
+          </button>
+
+          {/* Profile Dropdown */}
+          {showProfileMenu && (
+            <div className="absolute top-16 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-50">
+              <ul className="space-y-2 text-gray-600">
+                <li className="cursor-pointer hover:text-black">👤 My Profile</li>
+                <li className="cursor-pointer hover:text-black">⚙️ Settings</li>
+                <li className="cursor-pointer hover:text-black">🚪 Logout</li>
+              </ul>
+            </div>
+          )}
         </div>
       </nav>
     </header>

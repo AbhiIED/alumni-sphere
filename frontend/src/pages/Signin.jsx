@@ -1,12 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Signin() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSignin = async (e) => {
+    e.preventDefault(); // prevent form refresh
+    setError("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signin", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password }),
+});
+
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // success → go to homepage
+        navigate("/homepage");
+      } else {
+        setError(data.error || "Login failed");
+      }
+    } catch (err) {
+      console.error("Signin error:", err);
+      setError("Something went wrong, please try again.");
+    }
+  };
+
   return (
-    <>
-      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-  <div className="sm:mx-auto sm:w-full sm:max-w-[640px]">
-    {/* Logo and Title Container */}
-    <div className="w-160  bg-[#aac9f2] px-0 py-6 h-58 flex-col justify-center  items-center ">
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-[640px]">
+        {/* Logo + Title */}
+        <div className="w-160 bg-[#BBDCE5] px-0 py-6 h-58 flex-col justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="630"
@@ -21,77 +52,55 @@ export default function Signin() {
               fill="white"
             />
           </svg>
-
           <h2 className="mt-5 mb-5 text-center text-4xl font-bold tracking-tight text-gray-700">
             Alumni Sphere
           </h2>
         </div>
 
-    {/* Form Container */}
-    <div className="mt-8 w-full">
-      <form action="#" method="POST" className="space-y-6">
-        {/* Email Input */}
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-900"
-          >
-            Email address
-          </label>
-          <div className="mt-2">
+        {/* Form */}
+        <form onSubmit={handleSignin} className="space-y-6 mt-10">
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-900">
+              Email address
+            </label>
             <input
               id="email"
               type="email"
-              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              autoComplete="email"
               className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
             />
           </div>
-        </div>
 
-        {/* Password Input */}
-        <div>
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-900"
-            >
+          {/* Password */}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900">
               Password
             </label>
-            <a
-              href="#"
-              className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Forgot password?
-            </a>
-          </div>
-          <div className="mt-2">
             <input
               id="password"
               type="password"
-              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              autoComplete="current-password"
               className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
             />
           </div>
-        </div>
 
-        {/* Submit Button */}
-        <div>
+          {/* Error Message */}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow hover:bg-indigo-500"
           >
             Sign in
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-</div>
-
-    </>
   );
 }

@@ -4,7 +4,7 @@ export default function Signup() {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center items-center px-6 py-2 lg:px-8">
-        <div className="w-160  bg-[#aac9f2] px-0 py-6 h-58 flex-col justify-center  items-center ">
+        <div className="w-160  bg-[#BBDCE5] px-0 py-6 h-58 flex-col justify-center  items-center ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="630"

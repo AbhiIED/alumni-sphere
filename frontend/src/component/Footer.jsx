@@ -3,12 +3,17 @@ import { Facebook, Instagram, Twitter, Github, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#BBDCE5] text-dark py-12">
+    <footer className="bg-[#BBDCE5] text-dark py-2">
       <div className="max-w-7xl mx-auto px-3 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-        {/* Solutions */}
+        {/* Menu */}
         <div>
+{/* <<<<<<< HEAD
           <h3 className="text-white font-semibold mb-4">Menu</h3>
           <ul className="space-y-2">
+            <li><a href="#" className="hover:text-blue">Alumni Directory</a></li>
+======= */}
+          <h3 className="text-white font-semibold mb-2">Menu</h3>
+          <ul className="space-y-1 ">
             <li><a href="#" className="hover:text-white">Alumni Directory</a></li>
             <li><a href="#" className="hover:text-white">My Connections</a></li>
             <li><a href="#" className="hover:text-white">Feed</a></li>
@@ -19,7 +24,7 @@ export default function Footer() {
 
         {/* Support */}
         <div>
-          <h3 className="text-white font-semibold mb-4">Support</h3>
+          <h3 className="text-white font-semibold mb-2">Support</h3>
           <ul className="space-y-2">
             <li><a href="#" className="hover:text-white">MANIT</a></li>
             <li><a href="#" className="hover:text-white">Vision</a></li>
@@ -27,19 +32,14 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Company */}
-        
-
-        {/* Legal */}
         
       </div>
 
-      {/* Newsletter */}
       <div className="max-w-2xl mx-auto mt-3 px-2 text-center">
         <p className="text-black-400 mt-2">
           Want to contact with us? 
         </p>
-        <form className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
+        <form className="mt-2 flex flex-col sm:flex-row gap-3 justify-center">
           <input
             type="email"
             name="email"
@@ -57,7 +57,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom */}
-      <div className="mt-3 border-t border-gray-700 pt-3 flex flex-col md:flex-row items-center justify-between px-6">
+      <div className="mt-2 border-t border-gray-700 pt-3 flex flex-col md:flex-row items-center justify-between px-6">
         <div className="flex space-x-6">
       <a href="#" className="hover:text-white">
         <Facebook className="w-6 h-6" />
@@ -75,9 +75,7 @@ export default function Footer() {
         <Youtube className="w-6 h-6" />
       </a>
     </div>
-        <p className="mt-4 md:mt-0 text-gray-400 text-sm">
-          © 2024 Your Company, Inc. All rights reserved.
-        </p>
+       
       </div>
     </footer>
   );
