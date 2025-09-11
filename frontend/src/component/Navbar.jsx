@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 import image from "../Images/logo.png";
-import option  from "../Images/option.png";
+
 import { User, Bell } from "lucide-react"; 
 
 export default function Navbar() {
