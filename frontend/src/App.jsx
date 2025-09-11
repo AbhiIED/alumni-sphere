@@ -1,11 +1,12 @@
-
-
-import Signin from "./pages/Signin";
-// import Homepage from "./pages/Homepage";
+import Directory from "./pages/Directory";
+import Homepage from "./pages/Homepage";
+import Signup from "./pages/signup";
 function App() {
   return (
     <>
-      <Signin />
+      {/* <Signup /> */}
+      {/* <Homepage /> */}
+      <Directory />
     </>
   );
 }
