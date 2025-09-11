@@ -2,12 +2,13 @@ import React,{useState} from "react";
 import image from "../Images/logo.png";
 import option  from "../Images/option.png";
 import { User, Bell } from "lucide-react"; 
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
   return (
-    <header className="bg-[#BBDCE5]">
+    <header className="bg-[#BBDCE5] fixed top-0 left-0 w-full z-50 shadow-md">
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-8xl items-center justify-around p-2 lg:px-8"
@@ -149,8 +150,16 @@ export default function Navbar() {
           {showProfileMenu && (
             <div className="absolute top-16 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-50">
               <ul className="space-y-2 text-gray-600">
-                <li className="cursor-pointer hover:text-black">👤 My Profile</li>
-                <li className="cursor-pointer hover:text-black">⚙️ Settings</li>
+<li>
+  <Link
+    to="/manage-account"
+    onClick={() => setShowProfileMenu(false)} // ✅ closes menu
+    className="block cursor-pointer hover:text-black"
+  >
+    👤 Profile Setting
+  </Link>
+</li>
+
                 <li className="cursor-pointer hover:text-black">🚪 Logout</li>
               </ul>
             </div>

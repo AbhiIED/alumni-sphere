@@ -20,13 +20,12 @@ export default function Signin() {
 
 
       const data = await res.json();
-
       if (res.ok) {
         // success → go to homepage
         navigate("/homepage");
       } else {
         setError(data.error || "Login failed");
-      }
+      } 
     } catch (err) {
       console.error("Signin error:", err);
       setError("Something went wrong, please try again.");
