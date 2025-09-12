@@ -1,24 +1,24 @@
 import React from "react";
-// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Loader from "./pages/Loader";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Signin from "./pages/Signin";
 // import Homepage from "./pages/Homepage";
+// import Loader from "./pages/Loader";
+import NewsDetails from "./pages/NewsDetails";
 
 function App() {
   return (
     <div>
-      {/* Uncomment this section to enable routing */}
-      {/* 
-      <Router>
+      <NewsDetails />
+      {/* <Router>
         <Routes>
           <Route path="/" element={<Signin />} />
           <Route path="/homepage" element={<Homepage />} />
         </Routes>
-      </Router> 
-      */}
+      </Router> */}
 
       {/* Render Loader page */}
-      <Loader />
+      {/* <Loader /> */}
+      {/* <Homepage /> */}
     </div>
   );
 }
