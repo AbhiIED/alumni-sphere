@@ -1,5 +1,6 @@
 import React,{useState} from "react";
 import image from "../Images/logo.png";
+import { Link } from "react-router-dom";
 
 import { User, Bell } from "lucide-react"; 
 
@@ -147,14 +148,16 @@ export default function Navbar() {
 
           {/* Profile Dropdown */}
           {showProfileMenu && (
-            <div className="absolute top-16 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-50">
-              <ul className="space-y-2 text-gray-600">
-                <li className="cursor-pointer hover:text-black">👤 My Profile</li>
-                <li className="cursor-pointer hover:text-black">⚙️ Settings</li>
-                <li className="cursor-pointer hover:text-black">🚪 Logout</li>
-              </ul>
-            </div>
-          )}
+  <div className="absolute top-16 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-50">
+    <ul className="space-y-2 text-gray-600">
+      <li className="cursor-pointer hover:text-black">
+        <Link to="/manage-account">👤 Profile Settings</Link>
+      </li>
+      <li className="cursor-pointer hover:text-black">🚪 Logout</li>
+    </ul>
+  </div>
+)}
+
         </div>
       </nav>
     </header>

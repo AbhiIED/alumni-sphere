@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signin from "./pages/Signin";
 import Homepage from "./pages/Homepage";
 import ManageAccount from "./pages/ManageAccount"; // ✅ import
-
 function App() {
   return (
     <Router>
