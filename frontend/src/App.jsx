@@ -7,6 +7,7 @@ import Homepage from "./pages/Homepage";
 import ManageAccount from "./pages/ManageAccount"; // ✅ import
 import Directory from "./pages/Directory";
 
+
 function App() {
   return (
     <Router>
@@ -17,7 +18,6 @@ function App() {
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/manage-account" element={<ManageAccount />} />
         <Route path="/directory" element={<Directory />} />
-         
       </Routes>
     </Router>
   );
