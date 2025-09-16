@@ -112,16 +112,17 @@ export default function HeroSection() {
                   <p className="text-xs text-gray-600">{member.course}</p>
 
                   {/* Toggle Button */}
-                  <button
-                    onClick={() => handleToggleConnect(index)}
-                    className={`mt-2 px-3 py-1 text-xs font-medium rounded-full shadow focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                      isSent
-                        ? "bg-blue-500 text-white hover:bg-blue-500 focus:ring-gray-500"
-                        : "bg-[#cfab8d] text-white hover:bg-[#896C6C] focus:ring-[#896C6C]"
-                    }`}
-                  >
-                    {isSent ? "Sent" : "Connect"}
-                  </button>
+<button
+  onClick={() => handleToggleConnect(index)}
+  className={`mt-2 px-4 py-1.5 text-xs font-semibold rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 ${
+    isSent
+      ? "bg-amber-600 text-white hover:bg-amber-700 hover:shadow-lg focus:ring-amber-500"
+      : "bg-amber-600 text-white hover:bg-amber-700 hover:shadow-lg focus:ring-amber-500"
+  }`}
+>
+  {isSent ? "Sent" : "Connect"}
+</button>
+
                 </li>
               );
             })}

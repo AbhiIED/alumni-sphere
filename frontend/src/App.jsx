@@ -6,8 +6,10 @@ import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
 import ManageAccount from "./pages/ManageAccount"; // ✅ import
 import Directory from "./pages/Directory";
-
-
+import Feed from "./pages/Feed";
+import CreatePost from "./pages/CreatePost";
+import ConnectionPage from "./pages/ConnectionPage";
+import DonationPage from "./pages/DonationPage";
 function App() {
   return (
     <Router>
@@ -18,6 +20,11 @@ function App() {
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/manage-account" element={<ManageAccount />} />
         <Route path="/directory" element={<Directory />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/connections" element={<ConnectionPage />} />
+        <Route path="/donations" element={<DonationPage />} />
+        
       </Routes>
     </Router>
   );

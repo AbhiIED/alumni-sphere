@@ -9,12 +9,14 @@ import {
   Briefcase,
   HeartHandshake,
   Home,
+  ChevronDown,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showFeedDropdown, setShowFeedDropdown] = useState(false);
 
   const linkClass = ({ isActive }) =>
     `flex items-center gap-2 font-semibold transition ${
@@ -24,7 +26,7 @@ export default function Navbar() {
     }`;
 
   return (
-    <header className="bg-[#BBDCE5] fixed top-0 left-0 w-full z-50 ">
+    <header className="bg-[#BBDCE5] fixed top-0 left-0 w-full z-50">
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-8xl items-center justify-between p-2 lg:px-8"
@@ -49,17 +51,49 @@ export default function Navbar() {
             My Connections
           </NavLink>
 
-          <NavLink to="/feed" className={linkClass}>
-            <Rss className="h-5 w-5" />
-            Feed
-          </NavLink>
+          {/* Feed Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowFeedDropdown(!showFeedDropdown)}
+              className="flex items-center gap-2 font-semibold text-black hover:text-indigo-600 transition"
+            >
+              <Rss className="h-5 w-5" />
+              Feed
+              <ChevronDown className="h-4 w-4" />
+            </button>
+
+            {showFeedDropdown && (
+              <div className="absolute top-10 left-0 w-40 bg-white shadow-lg rounded-lg p-2 z-50">
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li>
+                    <NavLink
+                      to="/feed"
+                      className="block px-3 py-2 hover:bg-gray-100 rounded-md"
+                      onClick={() => setShowFeedDropdown(false)}
+                    >
+                      📜 View All Feed
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/create-post"
+                      className="block px-3 py-2 hover:bg-gray-100 rounded-md"
+                      onClick={() => setShowFeedDropdown(false)}
+                    >
+                      ✍️ Post Content
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
 
           <NavLink to="/jobs" className={linkClass}>
             <Briefcase className="h-5 w-5" />
             Jobs
           </NavLink>
 
-          <NavLink to="/donate" className={linkClass}>
+          <NavLink to="/donations" className={linkClass}>
             <HeartHandshake className="h-5 w-5" />
             Donate
           </NavLink>
@@ -92,7 +126,9 @@ export default function Navbar() {
                   🔔 Your profile was viewed 5 times this week.
                 </li>
                 <li className="border-b pb-2">✉️ You have 3 new messages.</li>
-                <li className="border-b pb-2">⭐ You received a new endorsement.</li>
+                <li className="border-b pb-2">
+                  ⭐ You received a new endorsement.
+                </li>
                 <li className="border-b pb-2">
                   📢 Announcement: New features added!
                 </li>
