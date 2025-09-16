@@ -21,12 +21,12 @@ export default function Navbar() {
   const linkClass = ({ isActive }) =>
     `flex items-center gap-2 font-semibold transition ${
       isActive
-        ? "text-indigo-600" // Active page
-        : "text-black hover:text-indigo-600"
+        ? "text-amber-600" // active page
+        : "text-gray-700 hover:text-amber-600"
     }`;
 
   return (
-    <header className="bg-[#BBDCE5] fixed top-0 left-0 w-full z-50">
+    <header className="bg-white border-b border-gray-200 fixed top-0 left-0 w-full z-50 shadow-sm">
       <nav
         aria-label="Global"
         className="mx-auto flex max-w-8xl items-center justify-between p-2 lg:px-8"
@@ -55,7 +55,7 @@ export default function Navbar() {
           <div className="relative">
             <button
               onClick={() => setShowFeedDropdown(!showFeedDropdown)}
-              className="flex items-center gap-2 font-semibold text-black hover:text-indigo-600 transition"
+              className="flex items-center gap-2 font-semibold text-gray-700 hover:text-amber-600 transition"
             >
               <Rss className="h-5 w-5" />
               Feed
@@ -63,12 +63,12 @@ export default function Navbar() {
             </button>
 
             {showFeedDropdown && (
-              <div className="absolute top-10 left-0 w-40 bg-white shadow-lg rounded-lg p-2 z-50">
+              <div className="absolute top-10 left-0 w-40 bg-white shadow-lg rounded-lg p-2 z-50 border border-gray-200">
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li>
                     <NavLink
                       to="/feed"
-                      className="block px-3 py-2 hover:bg-gray-100 rounded-md"
+                      className="block px-3 py-2 hover:bg-amber-50 rounded-md"
                       onClick={() => setShowFeedDropdown(false)}
                     >
                       📜 View All Feed
@@ -77,7 +77,7 @@ export default function Navbar() {
                   <li>
                     <NavLink
                       to="/create-post"
-                      className="block px-3 py-2 hover:bg-gray-100 rounded-md"
+                      className="block px-3 py-2 hover:bg-amber-50 rounded-md"
                       onClick={() => setShowFeedDropdown(false)}
                     >
                       ✍️ Post Content
@@ -104,19 +104,21 @@ export default function Navbar() {
           {/* Notifications */}
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="flex items-center gap-2 hover:bg-gray-200 p-2 rounded-full transition"
+            className="flex items-center gap-2 hover:bg-amber-50 p-2 rounded-full transition"
           >
-            <Bell className="h-6 w-6 text-black hover:text-indigo-600" />
+            <Bell className="h-6 w-6 text-gray-700 hover:text-amber-600" />
           </button>
 
           {showNotifications && (
-            <div className="absolute top-14 right-16 w-80 bg-white shadow-lg rounded-lg p-4 z-50">
-              <h3 className="text-lg font-bold text-gray-700 mb-2">
+            <div className="absolute top-14 right-16 w-80 bg-white shadow-lg rounded-lg p-4 z-50 border border-gray-200">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">
                 Notifications
               </h3>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="border-b pb-2">🎉 New event this weekend!</li>
-                <li className="border-b pb-2">👤 John Doe sent you a request.</li>
+                <li className="border-b pb-2">
+                  👤 John Doe sent you a request.
+                </li>
                 <li className="border-b pb-2">📰 New article in your feed.</li>
                 <li className="border-b pb-2">💼 New job posting available.</li>
                 <li className="border-b pb-2">
@@ -132,7 +134,9 @@ export default function Navbar() {
                 <li className="border-b pb-2">
                   📢 Announcement: New features added!
                 </li>
-                <li className="text-indigo-600 cursor-pointer">View more →</li>
+                <li className="text-amber-600 cursor-pointer font-medium">
+                  View more →
+                </li>
               </ul>
             </div>
           )}
@@ -140,24 +144,24 @@ export default function Navbar() {
           {/* Profile */}
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="flex items-center gap-2 hover:bg-gray-200 p-2 rounded-full transition"
+            className="flex items-center gap-2 hover:bg-amber-50 p-2 rounded-full transition"
           >
-            <User className="h-7 w-7 text-black hover:text-indigo-600" />
+            <User className="h-7 w-7 text-gray-700 hover:text-amber-600" />
           </button>
 
           {showProfileMenu && (
-            <div className="absolute top-14 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-50">
-              <ul className="space-y-2 text-gray-600">
+            <div className="absolute top-14 right-0 w-48 bg-white shadow-lg rounded-lg p-4 z-50 border border-gray-200">
+              <ul className="space-y-2 text-gray-700">
                 <li>
                   <NavLink
                     to="/manage-account"
                     onClick={() => setShowProfileMenu(false)}
-                    className="block cursor-pointer hover:text-indigo-600"
+                    className="block cursor-pointer hover:text-amber-600"
                   >
                     👤 Profile Setting
                   </NavLink>
                 </li>
-                <li className="cursor-pointer hover:text-indigo-600">🚪 Logout</li>
+                <li className="cursor-pointer hover:text-amber-600">🚪 Logout</li>
               </ul>
             </div>
           )}

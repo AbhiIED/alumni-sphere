@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MessageCircle, Search } from "lucide-react";
+import { MessageCircle, Search, X } from "lucide-react";
 
 // ✅ Reusable Card Component
 function ConnectionCard({ user, handleChat }) {
@@ -7,12 +7,11 @@ function ConnectionCard({ user, handleChat }) {
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden text-center transform transition duration-300 hover:scale-105 hover:shadow-amber-300 hover:shadow-2xl">
       {/* Cover + Avatar */}
       <div className="relative">
-        {/* Cover Image */}
         <div className="h-28 w-full">
           <img src={user.cover} alt="cover" className="h-full w-full object-cover" />
         </div>
 
-        {/* Avatar with Status */}
+        {/* Avatar */}
         <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12">
           <div className="relative">
             <img
@@ -35,9 +34,9 @@ function ConnectionCard({ user, handleChat }) {
         <p className="text-sm text-gray-600">{user.role}</p>
         <p className="text-xs text-gray-500 mt-1">{user.location}</p>
 
-        {/* Chat Button (kept Blue theme) */}
+        {/* Chat Button */}
         <button
-          onClick={() => handleChat(user.name)}
+          onClick={() => handleChat(user)}
           className="mt-5 flex items-center justify-center gap-2 w-full py-2 rounded-full bg-blue-600 text-white font-medium shadow-md hover:bg-blue-700 transition"
         >
           <MessageCircle size={18} />
@@ -48,8 +47,63 @@ function ConnectionCard({ user, handleChat }) {
   );
 }
 
+// ✅ Chat Window Component
+function ChatWindow({ user, onClose }) {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
+  const sendMessage = () => {
+    if (input.trim() === "") return;
+    setMessages([...messages, { sender: "You", text: input }]);
+    setInput("");
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 w-80 bg-white border border-gray-300 rounded-2xl shadow-lg flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center bg-blue-600 text-white p-3 rounded-t-2xl">
+        <h2 className="font-semibold">{user.name}</h2>
+        <button onClick={onClose}>
+          <X size={18} />
+        </button>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 p-3 overflow-y-auto max-h-64 text-sm">
+        {messages.length === 0 ? (
+          <p className="text-gray-500 text-center">No messages yet.</p>
+        ) : (
+          messages.map((msg, index) => (
+            <div key={index} className="mb-2">
+              <span className="font-semibold">{msg.sender}: </span>
+              <span>{msg.text}</span>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="flex items-center p-3 border-t">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="flex-1 border rounded-full px-3 py-1 text-sm focus:ring-2 focus:ring-blue-400 outline-none"
+          placeholder="Type a message..."
+        />
+        <button
+          onClick={sendMessage}
+          className="ml-2 bg-blue-600 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-700"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Connections() {
-  // ✅ Clean Connections Data
+  
   const connections = [
     {
       id: 1,
@@ -80,9 +134,9 @@ export default function Connections() {
     },
     {
       id: 4,
-      name: "Ankit Verma",
+      name: "Priya Nair",
       role: "Research Scholar",
-      location: "Pune, India",
+      location: "Kochi, India",
       avatar: "https://i.ibb.co/HHXfN8P/male-avatar.png",
       cover: "https://picsum.photos/400/150?random=4",
       status: "offline",
@@ -98,41 +152,24 @@ export default function Connections() {
     },
     {
       id: 6,
-      name: "Suresh Reddy",
-      role: "Software Engineer",
-      location: "Chennai, India",
+      name: "Neha Gupta",
+      role: "Product Manager",
+      location: "Gurgaon, India",
       avatar: "https://i.ibb.co/HHXfN8P/male-avatar.png",
       cover: "https://picsum.photos/400/150?random=6",
-      status: "offline",
-    },
-    {
-      id: 7,
-      name: "Rohit Singh",
-      role: "Entrepreneur",
-      location: "Pune, India",
-      avatar: "https://i.ibb.co/HHXfN8P/male-avatar.png",
-      cover: "https://picsum.photos/400/150?random=7",
       status: "online",
-    },
-    {
-      id: 8,
-      name: "Priya Nair",
-      role: "Research Scholar",
-      location: "Kochi, India",
-      avatar: "https://i.ibb.co/HHXfN8P/male-avatar.png",
-      cover: "https://picsum.photos/400/150?random=8",
-      status: "offline",
     },
   ];
 
+
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [chatUser, setChatUser] = useState(null);
 
-  const handleChat = (name) => {
-    alert(`💬 Starting chat with ${name}...`);
+  const handleChat = (user) => {
+    setChatUser(user);
   };
 
-  // ✅ Search + Filter Logic
   const filteredConnections = connections.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -187,7 +224,6 @@ export default function Connections() {
             <ConnectionCard key={user.id} user={user} handleChat={handleChat} />
           ))}
 
-          {/* No results */}
           {filteredConnections.length === 0 && (
             <p className="text-center text-gray-500 col-span-full">
               No connections found.
@@ -195,6 +231,9 @@ export default function Connections() {
           )}
         </div>
       </div>
+
+      {/* Chat Window */}
+      {chatUser && <ChatWindow user={chatUser} onClose={() => setChatUser(null)} />}
     </section>
   );
 }

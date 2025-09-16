@@ -1,15 +1,21 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 import Loader from "./pages/Loader";
 import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";  
+import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
-import ManageAccount from "./pages/ManageAccount"; // ✅ import
+import ManageAccount from "./pages/ManageAccount";
 import Directory from "./pages/Directory";
 import Feed from "./pages/Feed";
 import CreatePost from "./pages/CreatePost";
 import ConnectionPage from "./pages/ConnectionPage";
 import DonationPage from "./pages/DonationPage";
+import AlumniProfile from "./component/AlumniProfile"; // ✅ import profile page
+import RegisterPage from "./pages/RegisterPage";
 function App() {
   return (
     <Router>
@@ -25,11 +31,12 @@ function App() {
         <Route path="/connections" element={<ConnectionPage />} />
         <Route path="/donations" element={<DonationPage />} />
         
+        {/* ✅ Add dynamic route for individual alumni */}
+        <Route path="/alumni/:id" element={<AlumniProfile />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </Router>
   );
 }
 
-
 export default App;
-

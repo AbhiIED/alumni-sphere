@@ -65,14 +65,14 @@ export default function HeroSection() {
   ];
 
   return (
-    <section className="bg-white py-16">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Stay Connected with your Batchmates
-          </h2>
-        </div>
+<section className="bg-gray-50 py-16 mt-10">
+  <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    {/* Title */}
+    <div className="mx-auto max-w-2xl text-center">
+      <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        Stay Connected with your Batchmates
+      </h2>
+    </div>
 
         {/* Search Bar */}
         <div className="w-full max-w-md mx-auto mt-5">
