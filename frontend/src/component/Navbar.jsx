@@ -39,7 +39,7 @@ export default function Navbar() {
 
         {/* 🌐 Navigation Links */}
         <div className="hidden lg:flex lg:gap-x-6 items-center">
-          <NavLink to="/directory" className={linkClass}>
+          <NavLink to="/alumni" className={linkClass}>
             <BookOpen className="h-5 w-5" />
             Alumni Directory
           </NavLink>
@@ -82,7 +82,9 @@ export default function Navbar() {
               </h3>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="border-b pb-2">🎉 New event this weekend!</li>
-                <li className="border-b pb-2">👤 John Doe sent you a request.</li>
+                <li className="border-b pb-2">
+                  👤 John Doe sent you a request.
+                </li>
                 <li className="border-b pb-2">📰 New article in your feed.</li>
                 <li className="border-b pb-2">💼 New job posting available.</li>
                 <li className="border-b pb-2">
@@ -92,7 +94,9 @@ export default function Navbar() {
                   🔔 Your profile was viewed 5 times this week.
                 </li>
                 <li className="border-b pb-2">✉️ You have 3 new messages.</li>
-                <li className="border-b pb-2">⭐ You received a new endorsement.</li>
+                <li className="border-b pb-2">
+                  ⭐ You received a new endorsement.
+                </li>
                 <li className="border-b pb-2">
                   📢 Announcement: New features added!
                 </li>
@@ -121,7 +125,9 @@ export default function Navbar() {
                     👤 Profile Setting
                   </NavLink>
                 </li>
-                <li className="cursor-pointer hover:text-indigo-600">🚪 Logout</li>
+                <li className="cursor-pointer hover:text-indigo-600">
+                  🚪 Logout
+                </li>
               </ul>
             </div>
           )}
