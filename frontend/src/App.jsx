@@ -1,12 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  BrowserRouter,
+} from "react-router-dom";
 import Loader from "./pages/Loader";
 import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";  
+import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
 import ManageAccount from "./pages/ManageAccount"; // ✅ import
 import Directory from "./pages/Directory";
-
 
 function App() {
   return (
@@ -17,12 +21,10 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/manage-account" element={<ManageAccount />} />
-        <Route path="/directory" element={<Directory />} />
+        <Route path="/alumni/*" element={<Directory />} />
       </Routes>
     </Router>
   );
 }
 
-
 export default App;
-
