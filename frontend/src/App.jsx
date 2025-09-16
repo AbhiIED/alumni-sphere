@@ -1,13 +1,13 @@
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
+import NewsSection from "./component/NewsSection";
 
 
-import Signin from "./pages/Signin";
-// import Homepage from "./pages/Homepage";
-function App() {
+export default function App() {
   return (
-    <>
-      <Signin />
+  <>
+        <NewsSection/>
+        <h1>Hello there</h1>
     </>
   );
 }
-
-export default App;

@@ -46,10 +46,11 @@
 /* Divider */
 .divider {
   border-color: var(--color-divider);
+}
 /* Thin scrollbar */
 ::-webkit-scrollbar {
-  height: 10px;   /* 👈 smaller height for horizontal scrollbar */
-  width: 6px;    /* 👈 smaller width for vertical scrollbar */
+  height: 10px;   /*  smaller height for horizontal scrollbar */
+  width: 6px;    /*  smaller width for vertical scrollbar */
 }
 
 ::-webkit-scrollbar-track {
