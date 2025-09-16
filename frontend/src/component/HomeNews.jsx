@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // icons
-
+import { Link } from "react-router-dom";
 export default function HomeNews() {
   const scrollRef = useRef(null);
 
@@ -42,11 +42,13 @@ export default function HomeNews() {
           </button>
 
           {/* Blog Carousel */}
+
           <div
             ref={scrollRef}
             className="flex overflow-x-scroll snap-x snap-mandatory scroll-smooth gap-8 px-8 scrollbar-none"
           >
             {/* Blog 1 */}
+            <Link to={"/news"} >
             <article className="flex-none w-80 snap-center flex flex-col items-start justify-between">
               <div className="relative w-full">
                 <img
@@ -75,6 +77,7 @@ export default function HomeNews() {
                 </p>
               </div>
             </article>
+            </Link>
 
             {/* Blog 2 */}
             <article className="flex-none w-80 snap-center flex flex-col items-start justify-between">

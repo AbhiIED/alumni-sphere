@@ -6,8 +6,8 @@ import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
 import ManageAccount from "./pages/ManageAccount"; // ✅ import
 import Directory from "./pages/Directory";
-
-
+import NewsDetails from "./pages/NewsDetails";
+import Events from "./pages/Events";
 function App() {
   return (
     <Router>
@@ -18,6 +18,8 @@ function App() {
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/manage-account" element={<ManageAccount />} />
         <Route path="/directory" element={<Directory />} />
+        <Route path="/news" element={<NewsDetails/>} />
+        <Route path="/events" element={<Events />}/>
       </Routes>
     </Router>
   );
