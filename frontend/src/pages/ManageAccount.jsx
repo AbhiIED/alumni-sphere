@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../component/Navbar";
+
 export default function ManageAccount() {
   const [profileSettings, setProfileSettings] = useState({
     profilePic: false,
@@ -51,8 +52,16 @@ export default function ManageAccount() {
   return (
     <>
       <Navbar />
-      <div className="h-screen w-screen bg-gray-50 flex justify-center items-center mt-10 px-4 py-8 overflow-hidden">
-        <div className="w-full max-w-6xl bg-white h-full p-6 overflow-y-auto shadow-lg rounded-2xl flex">
+      <div
+        data-scroll
+        data-scroll-container
+        className="h-screen w-screen bg-gray-50 flex justify-center items-center mt-10 px-4 py-8 overflow-hidden"
+      >
+        <div
+          data-scroll
+          data-scroll-speed="1"
+          className="w-full max-w-6xl bg-white h-full p-6 overflow-y-auto shadow-lg rounded-2xl flex"
+        >
           {/* Left Side: Account Settings */}
           <div className="flex-1 pr-6 border-r">
             <h2 className="text-2xl font-semibold mb-6 text-center">

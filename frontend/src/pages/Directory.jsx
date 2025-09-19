@@ -18,9 +18,9 @@ const Directory = () => {
         </p>
 
         {/* Alumni List */}
-        <AlumniList />
+        <AlumniList data-scroll data-scroll-speed="1.5"/>
       </section>
-      <Footer />
+      <Footer data-scroll data-scroll-speed="2"/>
     </>
   );
 };
