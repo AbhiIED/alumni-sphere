@@ -24,6 +24,7 @@ export default function HeroSection() {
         {/* Blog Articles Row-wise */}
         <div className="mt-10 space-y-12">
           {/* Blog 1 */}
+          <Link to={"/events"}>
           <article className="flex flex-col lg:flex-row items-start gap-6">
             <div className="w-full lg:w-1/4">
               <img
@@ -60,7 +61,7 @@ export default function HeroSection() {
 
             </div>
           </article>
-
+          </Link>
           {/* Blog 2 */}
           <article className="flex flex-col lg:flex-row items-start gap-6">
             <div className="w-full lg:w-1/4">
