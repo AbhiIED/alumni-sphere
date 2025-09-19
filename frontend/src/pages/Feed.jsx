@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from '../component/Navbar'
-import NewsSection from '../component/NewsSection'
 import Footer from '../component/Footer'
-export default function NewsDetails() {
+import FeedSection from '../component/FeedSection'
+export default function Feed() {
   return (
     <>
     <Navbar/>
-    <NewsSection />
+    <FeedSection/>
     <Footer/>
     </>
   )
