@@ -17,95 +17,34 @@ import Feed from "./pages/Feed";
 import CreatePost from "./pages/CreatePost";
 import ConnectionPage from "./pages/ConnectionPage";
 import DonationPage from "./pages/DonationPage";
-import AlumniProfile from "./component/AlumniProfile";
+import AlumniProfile from "./component/AlumniProfile"; // ✅ fixed
 import RegisterPage from "./pages/RegisterPage";
 
 // Import Layout wrapper
-import Layout from "./component/Layout";
+import Layout from "./component/Layout"; // ✅ fixed
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Pages without scroll wrapper */}
+        {/* Pages without Layout */}
         <Route path="/" element={<Loader />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Pages WITH smooth scroll via Layout */}
-        <Route
-          path="/homepage"
-          element={
-            <Layout>
-              <Homepage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/manage-account"
-          element={
-            <Layout>
-              <ManageAccount />
-            </Layout>
-          }
-        />
-        <Route
-          path="/directory"
-          element={
-            <Layout>
-              <Directory />
-            </Layout>
-          }
-        />
-        <Route
-          path="/feed"
-          element={
-            <Layout>
-              <Feed />
-            </Layout>
-          }
-        />
-        <Route
-          path="/create-post"
-          element={
-            <Layout>
-              <CreatePost />
-            </Layout>
-          }
-        />
-        <Route
-          path="/connections"
-          element={
-            <Layout>
-              <ConnectionPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/donations"
-          element={
-            <Layout>
-              <DonationPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="/alumni/:id"
-          element={
-            <Layout>
-              <AlumniProfile />
-            </Layout>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <Layout>
-              <RegisterPage />
-            </Layout>
-          }
-        />
+        {/* Pages with Layout */}
+        <Route path="/homepage" element={<Layout><Homepage /></Layout>} />
+        <Route path="/manage-account" element={<Layout><ManageAccount /></Layout>} />
+        <Route path="/directory" element={<Layout><Directory /></Layout>} />
+        <Route path="/feed" element={<Layout><Feed /></Layout>} />
+        <Route path="/create-post" element={<Layout><CreatePost /></Layout>} />
+        <Route path="/connections" element={<Layout><ConnectionPage /></Layout>} />
+        <Route path="/donations" element={<Layout><DonationPage /></Layout>} />
+        <Route path="/alumni/:id" element={<Layout><AlumniProfile /></Layout>} />
+        <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
       </Routes>
     </Router>
   );
 }
+
+export default App; // ✅ don’t forget export

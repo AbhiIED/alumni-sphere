@@ -1,10 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../component/Navbar";
-<<<<<<< HEAD
-=======
-import Footer from "../component/Footer";
->>>>>>> 36e27afc0458b59689ea0cbad21cdfac7c46f26a
+import Footer from "../component/Footer"; // teammate ka change rakha
 
 export default function ManageAccount() {
   const [profileSettings, setProfileSettings] = useState({
@@ -29,7 +26,7 @@ export default function ManageAccount() {
   const [userName, setUserName] = useState("Your Name");
   const [isEditingName, setIsEditingName] = useState(false);
 
-  //profile about state
+  // Profile about state
   const [userAbout, setUserAbout] = useState("Your About Details of ");
   const [isEditingAbout, setIsEditingAbout] = useState(false);
 
@@ -65,31 +62,17 @@ export default function ManageAccount() {
     setIsEditingName(false);
     localStorage.setItem("userName", userName);
   };
+
   const handleAboutSave = () => {
     setIsEditingAbout(false);
     localStorage.setItem("userAbout", userName);
   };
-  
 
   return (
     <>
       <Navbar />
-<<<<<<< HEAD
-      <div
-        data-scroll
-        data-scroll-container
-        className="h-screen w-screen bg-gray-50 flex justify-center items-center mt-10 px-4 py-8 overflow-hidden"
-      >
-        <div
-          data-scroll
-          data-scroll-speed="1"
-          className="w-full max-w-6xl bg-white h-full p-6 overflow-y-auto shadow-lg rounded-2xl flex"
-        >
-=======
-      <div className="min-h-screen h-full w-full
-       p-20 bg-white flex justify-center items-center mt-6">
-        <div className="w-full overflow-hidden sm:max-w-6xl p-8  h-full shadow-lg bg-slate-100 rounded-xl flex">
->>>>>>> 36e27afc0458b59689ea0cbad21cdfac7c46f26a
+      <div className="min-h-screen h-full w-full p-20 bg-white flex justify-center items-center mt-6">
+        <div className="w-full overflow-hidden sm:max-w-6xl p-8 h-full shadow-lg bg-slate-100 rounded-xl flex">
           {/* Left Side: Account Settings */}
           <div className="flex-1 pr-6 border-r">
             <h2 className="text-2xl font-semibold mb-6 text-center">
@@ -103,7 +86,9 @@ export default function ManageAccount() {
                 <span>{profileType === "public" ? "Public" : "Private"}</span>
                 <button
                   onClick={() =>
-                    setProfileType(profileType === "public" ? "private" : "public")
+                    setProfileType(
+                      profileType === "public" ? "private" : "public"
+                    )
                   }
                   className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors ${
                     profileType === "public" ? "bg-[#896c6c]" : "bg-gray-400"
@@ -143,7 +128,9 @@ export default function ManageAccount() {
 
             {/* Notification Settings */}
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-3">Notification Settings</h3>
+              <h3 className="text-lg font-medium mb-3">
+                Notification Settings
+              </h3>
               <label className="flex items-center justify-between cursor-pointer">
                 <span>Online notification</span>
                 <button
@@ -208,15 +195,12 @@ export default function ManageAccount() {
 
           {/* Right Side: Profile Update */}
           <div className="w-1/3 flex flex-col items-center pb-8 justify-start pl-6">
-            {/* <h3 className="text-lg font-medium mb-4">Profile</h3> */}
-
-            <div className="relative w-32   h-32 rounded-full overflow-hidden border-2 border-white shadow-md mb-4 group">
+            <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white shadow-md mb-4 group">
               <img
                 src={profilePic || "https://via.placeholder.com/150"}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
-              {/* Edit Icon Overlay */}
               <div
                 onClick={handleButtonClick}
                 className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition"
@@ -238,7 +222,6 @@ export default function ManageAccount() {
               </div>
             </div>
 
-            {/* Hidden File Input */}
             <input
               type="file"
               accept="image/*"
@@ -289,6 +272,7 @@ export default function ManageAccount() {
                 </div>
               )}
             </div>
+
             {/* About Editing */}
             <div className="mb-4 text-center">
               {isEditingAbout ? (
@@ -331,17 +315,10 @@ export default function ManageAccount() {
                 </div>
               )}
             </div>
-
-            {/* <button
-              onClick={handleButtonClick}
-              className="bg-[#896c6c] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#4a3030] transition"
-            >
-              Update Profile Picture
-            </button> */}
           </div>
         </div>
       </div>
-      < Footer />
+      <Footer />
     </>
   );
- }
+}
