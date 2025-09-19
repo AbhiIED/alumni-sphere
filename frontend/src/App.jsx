@@ -35,7 +35,8 @@ function App() {
         <Route path="/alumni/:id" element={<AlumniProfile />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
-    </Router>
+</Router>
+    
   );
 }
 
