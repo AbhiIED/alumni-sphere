@@ -16,6 +16,9 @@ import ConnectionPage from "./pages/ConnectionPage";
 import DonationPage from "./pages/DonationPage";
 import AlumniProfile from "./component/AlumniProfile"; // ✅ import profile page
 import RegisterPage from "./pages/RegisterPage";
+import NewsDeatils from "./pages/NewsDetails";
+import Events from "./pages/Events";
+import OtpVerification from "./pages/OtpVerification";
 function App() {
   return (
     <Router>
@@ -23,17 +26,19 @@ function App() {
         <Route path="/" element={<Loader />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/otp-verification" element={<OtpVerification />} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/manage-account" element={<ManageAccount />} />
         <Route path="/directory" element={<Directory />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/connections" element={<ConnectionPage />} />
-        <Route path="/donations" element={<DonationPage />} />
-        
+        <Route path="/donations" element={<DonationPage />} />        
         {/* ✅ Add dynamic route for individual alumni */}
         <Route path="/alumni/:id" element={<AlumniProfile />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/all-news" element={<NewsDeatils />} />
+        <Route path="/events" element={<Events />} />
       </Routes>
     </Router>
   );

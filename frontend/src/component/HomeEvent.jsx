@@ -1,24 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 export default function HeroSection() {
   return (
-<div className="bg-blue-50 py-16 mt-10">
-  <div className="max-w-7xl mx-auto px-6 lg:px-8">
-    {/* Section Title */}
-    <div className="max-w-2xl">
-      <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-        Upcoming Events
-      </h2>
-    </div>
+    <div className="bg-blue-50 py-16 ">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Section Title */}
+        <div className="max-w-2xl">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Upcoming Events
+          </h2>
+        </div>
 
         {/* Tabs (Latest Events / All Events) */}
         <div className="mt-4 flex gap-4">
           <button className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-xl shadow hover:bg-indigo-700 transition">
             Latest Events
           </button>
+          <Link to="/events">
           <button className="px-4 py-2 bg-gray-200 text-gray-900 font-semibold rounded-xl shadow hover:bg-gray-300 transition">
             All Events
           </button>
+          </Link>
         </div>
 
         {/* Blog Articles Row-wise */}
@@ -35,29 +38,25 @@ export default function HeroSection() {
             <div className="w-full lg:w-2/3">
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <time dateTime="2020-03-16">Mar 16, 2020</time>
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Online Meet
-                </a>
+                <span className="font-medium text-indigo-600">Online Meet</span>
               </div>
               <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
-                <a href="#"> Join Alumni Virtual Meet</a>
+                <Link to={"/events"} className="hover:text-indigo-600">
+                  Join Alumni Virtual Meet
+                </Link>
               </h3>
               <p className="mt-2 text-gray-600">
                 Illo sint voluptas. Error voluptates culpa eligendi. Hic vel
                 totam vitae illo. Non aliquid explicabo necessitatibus unde.
               </p>
+
               {/* Register Button */}
-
-<Link
-  to={`/register?event=Alumni Virtual Meet`}
-  className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
->
-  Register
-</Link>
-
+              <Link
+                to={`/register?event=Alumni Virtual Meet`}
+                className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
+              >
+                Register
+              </Link>
             </div>
           </article>
 
@@ -73,30 +72,26 @@ export default function HeroSection() {
             <div className="w-full lg:w-2/3">
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <time dateTime="2020-03-10">Mar 10, 2020</time>
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Reunion
-                </a>
+                <span className="font-medium text-indigo-600">Reunion</span>
               </div>
               <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
-                <a href="#">Get Ready for Alumni Reunion</a>
+                <Link to={"/events"} className="hover:text-indigo-600">
+                  Get Ready for Alumni Reunion
+                </Link>
               </h3>
               <p className="mt-2 text-gray-600">
                 Optio sit exercitation et ex ullamco aliquid explicabo. Dolore
                 do ut officia anim non ad eu. Magna laboris incididunt commodo
                 elit ipsum.
               </p>
+
               {/* Register Button */}
-
-<Link
-  to={`/register?event=Alumni Virtual Meet`}
-  className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
->
-  Register
-</Link>
-
+              <Link
+                to={`/register?event=Alumni Reunion`}
+                className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
+              >
+                Register
+              </Link>
             </div>
           </article>
 
@@ -112,30 +107,28 @@ export default function HeroSection() {
             <div className="w-full lg:w-2/3">
               <div className="flex items-center gap-4 text-sm text-gray-500">
                 <time dateTime="2020-02-12">Feb 12, 2020</time>
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
+                <span className="font-medium text-indigo-600">
                   Student-Alumni Talk
-                </a>
+                </span>
               </div>
               <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
-                <a href="#">Get a chance to talk to your Alumni</a>
+                <Link to={"/events"} className="hover:text-indigo-600">
+                  Get a chance to talk to your Alumni
+                </Link>
               </h3>
               <p className="mt-2 text-gray-600">
                 Dolore commodo in nulla do nulla esse consectetur. Adipisicing
                 voluptate velit sint adipisicing ex duis elit deserunt sint
                 ipsum.
               </p>
+
               {/* Register Button */}
-
-<Link
-  to={`/register?event=Alumni Virtual Meet`}
-  className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
->
-  Register
-</Link>
-
+              <Link
+                to={`/register?event=Student Alumni Talk`}
+                className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
+              >
+                Register
+              </Link>
             </div>
           </article>
         </div>
