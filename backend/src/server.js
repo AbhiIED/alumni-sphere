@@ -19,8 +19,17 @@ app.use("/auth", authRoutes);
 const alumniRoutes = require("./routes/alumniRoutes");
 app.use("/alumni", alumniRoutes);
 
+const alumniHeroRoutes = require("./routes/alumniHeroRoutes");
+app.use("/alumni-hero", alumniHeroRoutes); // 👈 NEW ROUTE
+
 const postRoutes = require("./routes/postRoutes");
 app.use("/posts", postRoutes);
+
+const eventRoutes = require("./routes/eventRoutes");
+app.use("/events-api", eventRoutes);
+
+const jobsRoutes = require("./routes/jobsRoutes");
+app.use("/jobs-api", jobsRoutes);
 
 app.listen(5000, () => {
   console.log("Server running at http://localhost:5000");

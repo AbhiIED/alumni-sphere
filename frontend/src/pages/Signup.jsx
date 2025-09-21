@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import logo from "../Images/logo.png"; // ✅ Your alumni logo
+import { useNavigate } from "react-router-dom";   // ✅ import navigation
+import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/24/solid";
 
 // Reusable Input Field
 const InputField = ({ ...props }) => (
@@ -48,6 +50,8 @@ export default function Signup() {
   });
 
   const [message, setMessage] = useState("");
+const [isSuccess, setIsSuccess] = useState(false); // ✅ added
+const navigate = useNavigate(); // ✅ added
   const currentYear = new Date().getFullYear();
   const isAlumni = formData.endYear && parseInt(formData.endYear) < currentYear;
   const isStudent = formData.endYear && parseInt(formData.endYear) >= currentYear;
@@ -81,37 +85,47 @@ export default function Signup() {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage("✅ Signup successful! You can now log in.");
-        setFormData({
-          firstName: "",
-          lastName: "",
-          gender: "",
-          scholarId: "",
-          email: "",
-          primaryPhone: "",
-          secondaryPhone: "",
-          department: "",
-          branch: "",
-          endYear: "",
-          currentYear: "",
-          semester: "",
-          jobTitle: "",
-          companyName: "",
-          city: "",
-          country: "",
-          sector: "",
-          skills: "",
-          address: "",
-          password: "",
-        });
-      } else {
-        setMessage(data.message || "❌ Signup failed. Try again.");
-      }
+  setIsSuccess(true);
+  setMessage("🎉 Your account has been created successfully!");
+  setFormData({
+    firstName: "",
+    lastName: "",
+    gender: "",
+    scholarId: "",
+    email: "",
+    primaryPhone: "",
+    secondaryPhone: "",
+    department: "",
+    branch: "",
+    endYear: "",
+    currentYear: "",
+    semester: "",
+    jobTitle: "",
+    companyName: "",
+    city: "",
+    country: "",
+    sector: "",
+    skills: "",
+    address: "",
+    password: "",
+  });
+
+  // ✅ Redirect after 2s
+  setTimeout(() => {
+    navigate("/signin");
+  }, 2000);
+} else {
+  setIsSuccess(false);
+  setMessage(data.message || "❌ Signup failed. Please try again.");
+}
+
     } catch (error) {
       console.error("Error:", error);
+      setIsSuccess(false);
       setMessage("⚠️ Server error. Please try later.");
     }
   };
+
 
   return (
     <div className="flex h-screen w-full">
@@ -132,11 +146,27 @@ export default function Signup() {
       </div>
 
       {/* RIGHT SIDE - Signup Form */}
-      <div className="w-1/2 bg-gray-100 flex items-center justify-center p-10 overflow-y-auto">
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 mt-10">
+      <div className="w-1/2 bg-gray-100 flex items-center justify-center p-10 pt-80 overflow-y-auto">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 ">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
             Create Your Account
           </h2>
+{message && (
+  <div
+    className={`flex items-center gap-3 mt-4 mb-2 px-4 py-3 rounded-lg shadow-md text-sm font-medium
+      ${isSuccess 
+        ? "bg-green-100 text-green-800 border border-green-300" 
+        : "bg-red-100 text-red-800 border border-red-300"
+      }`}
+  >
+    {isSuccess ? (
+      <CheckCircleIcon className="h-5 w-5 text-green-600" />
+    ) : (
+      <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
+    )}
+    <span>{message}</span>
+  </div>
+)}
 
           <form
             onSubmit={handleSubmit}
@@ -369,10 +399,7 @@ export default function Signup() {
               Sign Up
             </button>
 
-            {/* Message */}
-            {message && (
-              <p className="text-center text-sm text-red-600 mt-2">{message}</p>
-            )}
+
           </form>
         </div>
       </div>

@@ -18,6 +18,7 @@ import AlumniProfile from "./component/AlumniProfile"; // ✅ import profile pag
 import RegisterPage from "./pages/RegisterPage";
 import NewsDeatils from "./pages/NewsDetails";
 import Events from "./pages/Events";
+import JobsPage from "./pages/JobsPage";
 import OtpVerification from "./pages/OtpVerification";
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/all-news" element={<NewsDeatils />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/jobs" element={<JobsPage />} />
       </Routes>
     </Router>
   );

@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function HeroSection() {
+  const [latestEvents, setLatestEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchLatestEvents = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/events-api?type=latest");
+        const data = await res.json();
+        setLatestEvents(data);
+      } catch (err) {
+        console.error("Error fetching latest events:", err);
+      }
+    };
+    fetchLatestEvents();
+  }, []);
+
   return (
-    <div className="bg-blue-50 py-16 ">
+    <div className="bg-blue-50 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Title */}
         <div className="max-w-2xl">
@@ -12,125 +27,58 @@ export default function HeroSection() {
           </h2>
         </div>
 
-        {/* Tabs (Latest Events / All Events) */}
+        {/* Tabs */}
         <div className="mt-4 flex gap-4">
-          <button className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-xl shadow hover:bg-indigo-700 transition">
+          <button
+            className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-xl shadow hover:bg-indigo-700 transition"
+          >
             Latest Events
           </button>
           <Link to="/events">
-          <button className="px-4 py-2 bg-gray-200 text-gray-900 font-semibold rounded-xl shadow hover:bg-gray-300 transition">
-            All Events
-          </button>
+            <button className="px-4 py-2 bg-gray-200 text-gray-900 font-semibold rounded-xl shadow hover:bg-gray-300 transition">
+              All Events
+            </button>
           </Link>
         </div>
 
-        {/* Blog Articles Row-wise */}
+        {/* Latest Events List */}
         <div className="mt-10 space-y-12">
-          {/* Blog 1 */}
-          <article className="flex flex-col lg:flex-row items-start gap-6">
-            <div className="w-full lg:w-1/4">
-              <img
-                src="https://images.unsplash.com/photo-1496128858413-b36217c2ce36?auto=format&fit=crop&w=800&q=80"
-                alt="Boost your conversion rate"
-                className="rounded-xl object-cover w-full h-40"
-              />
-            </div>
-            <div className="w-full lg:w-2/3">
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <time dateTime="2020-03-16">Mar 16, 2020</time>
-                <span className="font-medium text-indigo-600">Online Meet</span>
+          {latestEvents.map((event) => (
+            <article key={event.Event_ID} className="flex flex-col lg:flex-row items-start gap-6">
+              <div className="w-full lg:w-1/4">
+                <img
+                  src={event.Event_Image}
+                  alt={event.Event_Name}
+                  className="rounded-xl object-cover w-full h-40"
+                />
               </div>
-              <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
-                <Link to={"/events"} className="hover:text-indigo-600">
-                  Join Alumni Virtual Meet
-                </Link>
-              </h3>
-              <p className="mt-2 text-gray-600">
-                Illo sint voluptas. Error voluptates culpa eligendi. Hic vel
-                totam vitae illo. Non aliquid explicabo necessitatibus unde.
-              </p>
+              <div className="w-full lg:w-2/3">
+                <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <time dateTime={event.Event_Date}>
+                    {new Date(event.Event_Date).toLocaleDateString()}
+                  </time>
+                  <span className="font-medium text-indigo-600">
+                    {event.Event_Type ? "Online" : "Offline"}
+                  </span>
+                </div>
+                <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
+                  {event.Event_Name}
+                </h3>
+                <p className="mt-2 text-gray-600">{event.Event_Description}</p>
 
-              {/* Register Button */}
-              <Link
-                to={`/register?event=Alumni Virtual Meet`}
-                className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
-              >
-                Register
-              </Link>
-            </div>
-          </article>
-
-          {/* Blog 2 */}
-          <article className="flex flex-col lg:flex-row items-start gap-6">
-            <div className="w-full lg:w-1/4">
-              <img
-                src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?auto=format&fit=crop&w=800&q=80"
-                alt="How to use SEO"
-                className="rounded-xl object-cover w-full h-40"
-              />
-            </div>
-            <div className="w-full lg:w-2/3">
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <time dateTime="2020-03-10">Mar 10, 2020</time>
-                <span className="font-medium text-indigo-600">Reunion</span>
+                
+                  <a
+                    href={event.Event_Link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
+                  >
+                    Register
+                  </a>
+                
               </div>
-              <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
-                <Link to={"/events"} className="hover:text-indigo-600">
-                  Get Ready for Alumni Reunion
-                </Link>
-              </h3>
-              <p className="mt-2 text-gray-600">
-                Optio sit exercitation et ex ullamco aliquid explicabo. Dolore
-                do ut officia anim non ad eu. Magna laboris incididunt commodo
-                elit ipsum.
-              </p>
-
-              {/* Register Button */}
-              <Link
-                to={`/register?event=Alumni Reunion`}
-                className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
-              >
-                Register
-              </Link>
-            </div>
-          </article>
-
-          {/* Blog 3 */}
-          <article className="flex flex-col lg:flex-row items-start gap-6">
-            <div className="w-full lg:w-1/4">
-              <img
-                src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=800&q=80"
-                alt="Improve customer experience"
-                className="rounded-xl object-cover w-full h-40"
-              />
-            </div>
-            <div className="w-full lg:w-2/3">
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <time dateTime="2020-02-12">Feb 12, 2020</time>
-                <span className="font-medium text-indigo-600">
-                  Student-Alumni Talk
-                </span>
-              </div>
-              <h3 className="mt-2 text-2xl font-semibold leading-7 text-gray-900">
-                <Link to={"/events"} className="hover:text-indigo-600">
-                  Get a chance to talk to your Alumni
-                </Link>
-              </h3>
-              <p className="mt-2 text-gray-600">
-                Dolore commodo in nulla do nulla esse consectetur. Adipisicing
-                voluptate velit sint adipisicing ex duis elit deserunt sint
-                ipsum.
-              </p>
-
-              {/* Register Button */}
-              <Link
-                to={`/register?event=Student Alumni Talk`}
-                className="mt-4 inline-block px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-indigo-700 transition"
-              >
-                Register
-              </Link>
-            </div>
-          </article>
+            </article>
+          ))}
         </div>
       </div>
     </div>
