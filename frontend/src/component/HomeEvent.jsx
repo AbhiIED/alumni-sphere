@@ -18,7 +18,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <div className="bg-blue-50 py-16">
+    <div className="bg-blue-50 py-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Title */}
         <div className="max-w-2xl">
