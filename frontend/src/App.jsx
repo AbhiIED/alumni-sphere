@@ -19,7 +19,9 @@ import ConnectionPage from "./pages/ConnectionPage";
 import DonationPage from "./pages/DonationPage";
 import AlumniProfile from "./component/AlumniProfile"; // ✅ fixed
 import RegisterPage from "./pages/RegisterPage";
-
+import NewsDeatils from "./pages/NewsDetails";
+import Events from "./pages/Events";
+import JobsPage from "./pages/JobsPage";
 // Import Layout wrapper
 import Layout from "./component/Layout"; // ✅ fixed
 
@@ -31,7 +33,6 @@ function App() {
         <Route path="/" element={<Loader />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-
         {/* Pages with Layout */}
         <Route path="/homepage" element={<Layout><Homepage /></Layout>} />
         <Route path="/manage-account" element={<Layout><ManageAccount /></Layout>} />
@@ -42,6 +43,10 @@ function App() {
         <Route path="/donations" element={<Layout><DonationPage /></Layout>} />
         <Route path="/alumni/:id" element={<Layout><AlumniProfile /></Layout>} />
         <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
+
+        <Route path="/all-news" element={<NewsDeatils />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/jobs" element={<JobsPage />} />
       </Routes>
     </Router>
   );

@@ -14,6 +14,7 @@ const Directory = () => {
           Alumni Directory
         </h1>
         <p className="text-gray-600 text-center mb-10">
+          
           Explore and connect with alumni across different years and fields.
         </p>
 
@@ -24,5 +25,4 @@ const Directory = () => {
     </>
   );
 };
-
 export default Directory;
