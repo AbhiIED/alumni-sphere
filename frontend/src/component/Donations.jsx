@@ -1,76 +1,33 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heart, Search } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 export default function Donations() {
-  // Example donations data
-  const donationCauses = [
-    {
-      id: 1,
-      title: "Scholarship Fund",
-      description:
-        "Support meritorious students from underprivileged backgrounds by contributing to the alumni scholarship fund.",
-      image:
-        "https://images.unsplash.com/photo-1603575448364-48bcded5e2ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60",
-      raised: 35000,
-      target: 50000,
-      supporters: 120,
-      category: "Education",
-    },
-    {
-      id: 2,
-      title: "Library Modernization",
-      description:
-        "Help upgrade our college library with digital resources, new books, and study equipment for students.",
-      image:
-        "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60",
-      raised: 18000,
-      target: 40000,
-      supporters: 85,
-      category: "Infrastructure",
-    },
-    {
-      id: 3,
-      title: "Green Campus Initiative",
-      description:
-        "Join hands to make our campus eco-friendly by funding tree plantations, solar energy, and recycling programs.",
-      image:
-        "https://images.unsplash.com/photo-1508780709619-79562169bc64?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60",
-      raised: 22000,
-      target: 30000,
-      supporters: 64,
-      category: "Environment",
-    },
-    {
-      id: 4,
-      title: "Sports Development",
-      description:
-        "Support the growth of sports and athletics by contributing towards equipment and training facilities.",
-      image:
-        "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60",
-      raised: 12000,
-      target: 25000,
-      supporters: 50,
-      category: "Sports",
-    },
-    {
-      id: 5,
-      title: "Healthcare Facilities",
-      description:
-        "Contribute towards building better healthcare support and medical facilities for students and staff.",
-      image:
-        "https://images.unsplash.com/photo-1588776814546-ec9ecf4f4f0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60",
-      raised: 27000,
-      target: 45000,
-      supporters: 95,
-      category: "Health",
-    },
-  ];
-
+  const navigate = useNavigate();
+  const [donationCauses, setDonationCauses] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const handleDonate = (title) => {
-    alert(`🤎 Thank you for choosing to donate to "${title}"`);
+  // Fetch donation causes from backend
+  useEffect(() => {
+    const fetchCauses = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/donations");
+        if (!res.ok) throw new Error("Failed to fetch donation causes");
+        const data = await res.json();
+        setDonationCauses(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCauses();
+  }, []);
+
+  const handleDonate = (id) => {
+    navigate(`/donations/${id}`);
   };
 
   // ✅ Category color mapping
@@ -97,7 +54,8 @@ export default function Donations() {
       cause.description.toLowerCase().includes(search.toLowerCase());
 
     const matchesFilter =
-      filter === "all" || cause.category.toLowerCase() === filter.toLowerCase();
+      filter === "all" ||
+      cause.category?.toLowerCase() === filter.toLowerCase();
 
     return matchesSearch && matchesFilter;
   });
@@ -110,7 +68,8 @@ export default function Donations() {
           Alumni Donations
         </h1>
         <p className="text-gray-600 text-center mb-10">
-          Contribute towards meaningful causes that support our college and students.
+          Contribute towards meaningful causes that support our college and
+          students.
         </p>
 
         {/* Search & Filter Bar */}
@@ -139,85 +98,100 @@ export default function Donations() {
           </select>
         </div>
 
+        {/* Loading / Error */}
+        {loading && (
+          <p className="text-center text-gray-500">Loading donation causes…</p>
+        )}
+        {error && (
+          <p className="text-center text-red-500 mb-4">
+            Error: {error}. Please try again later.
+          </p>
+        )}
+
         {/* Donations Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {filteredCauses.map((cause) => {
-            const progress = Math.min((cause.raised / cause.target) * 100, 100);
+        {!loading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {filteredCauses.map((cause) => {
+              const progress = Math.min(
+                (cause.raised / cause.target) * 100,
+                100
+              );
 
-            return (
-              <div
-                key={cause.id}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-amber-300 hover:shadow-2xl"
-              >
-                {/* Banner */}
-                <div className="relative">
-                  <img
-                    src={cause.image}
-                    alt={cause.title}
-                    className="h-40 w-full object-cover"
-                  />
-                  {/* Category Badge */}
-                  <span
-                    className={`absolute top-3 left-3 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md ${
-                      categoryColors[cause.category] || "bg-gray-600"
-                    }`}
-                  >
-                    {cause.category}
-                  </span>
-                </div>
-
-                {/* Cause Info */}
-                <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                    {cause.title}
-                  </h2>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">
-                    {cause.description}
-                  </p>
-
-                  {/* Progress Bar */}
-                  <div
-                    className={`w-full rounded-full h-3 mb-4 ${
-                      categoryLightColors[cause.category] || "bg-gray-200"
-                    }`}
-                  >
-                    <div
-                      className={`h-3 rounded-full ${
+              return (
+                <div
+                  key={cause.id}
+                  className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-amber-300 hover:shadow-2xl"
+                >
+                  {/* Banner */}
+                  <div className="relative">
+                    <img
+                      src={cause.image}
+                      alt={cause.title}
+                      className="h-40 w-full object-cover"
+                    />
+                    {/* Category Badge */}
+                    <span
+                      className={`absolute top-3 left-3 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md ${
                         categoryColors[cause.category] || "bg-gray-600"
                       }`}
-                      style={{ width: `${progress}%` }}
-                    ></div>
+                    >
+                      {cause.category}
+                    </span>
                   </div>
 
-                  {/* Stats */}
-                  <div className="flex justify-between text-sm text-gray-500 mb-4">
-                    <span>₹{cause.raised.toLocaleString()} raised</span>
-                    <span>Target: ₹{cause.target.toLocaleString()}</span>
-                  </div>
-                  <p className="text-xs text-gray-400 mb-4">
-                    {cause.supporters} alumni have contributed
-                  </p>
+                  {/* Cause Info */}
+                  <div className="p-6">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                      {cause.title}
+                    </h2>
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                      {cause.description}
+                    </p>
 
-                  {/* Donate Button */}
-                  <button
-                    onClick={() => handleDonate(cause.title)}
-                    className="flex items-center justify-center gap-2 w-full py-2 rounded-full bg-amber-600 text-white font-medium shadow-md hover:bg-amber-700 transition"
-                  >
-                    <Heart size={18} className="fill-white" />
-                    Donate Now
-                  </button>
+                    {/* Progress Bar */}
+                    <div
+                      className={`w-full rounded-full h-3 mb-4 ${
+                        categoryLightColors[cause.category] || "bg-gray-200"
+                      }`}
+                    >
+                      <div
+                        className={`h-3 rounded-full ${
+                          categoryColors[cause.category] || "bg-gray-600"
+                        }`}
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="flex justify-between text-sm text-gray-500 mb-4">
+                      <span>₹{cause.raised?.toLocaleString()} raised</span>
+                      <span>Target: ₹{cause.target?.toLocaleString()}</span>
+                    </div>
+                    <p className="text-xs text-gray-400 mb-4">
+                      {cause.supporters} alumni have contributed
+                    </p>
+
+                    {/* Donate Button */}
+                    <button
+                      onClick={() => handleDonate(cause.id)}
+                      className="flex items-center justify-center gap-2 w-full py-2 rounded-full bg-amber-600 text-white font-medium shadow-md hover:bg-amber-700 transition"
+                    >
+                      <Heart size={18} className="fill-white" />
+                      Donate Now
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
 
-          {/* No results */}
-          {filteredCauses.length === 0 && (
-            <p className="text-center text-gray-500 col-span-full">
-              No donation causes found.
-            </p>
-          )}
-        </div>
+            {/* No results */}
+            {filteredCauses.length === 0 && (
+              <p className="text-center text-gray-500 col-span-full">
+                No donation causes found.
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

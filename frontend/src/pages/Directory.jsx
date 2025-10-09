@@ -1,12 +1,10 @@
 import AlumniList from "../component/AlumniList";
-import React from "react";
-import { Link } from "react-router-dom";
 import Footer from "../component/Footer";
 import Navbar from "../component/Navbar";
 const Directory = () => {
   return (
     <>
-    <Navbar />
+      <Navbar />
       {/* Page Wrapper with Background Gradient */}
       <section className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 pt-20 px-6">
         {/* Page Heading */}
@@ -19,9 +17,9 @@ const Directory = () => {
         </p>
 
         {/* Alumni List */}
-        <AlumniList />
+        <AlumniList data-scroll data-scroll-speed="1.5" />
       </section>
-      <Footer />
+      <Footer data-scroll data-scroll-speed="2" />
     </>
   );
 };
