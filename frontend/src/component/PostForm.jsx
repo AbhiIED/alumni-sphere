@@ -29,7 +29,7 @@ export default function PostForm() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/posts", {
+      const res = await fetch("http://localhost:3000/posts", {
         method: "POST",
         body: formData,
       });
@@ -53,7 +53,6 @@ export default function PostForm() {
   return (
     <section className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-blue-100 py-12 px-6 mt-10">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8 border border-blue-100">
-        
         {/* Heading */}
         <h1 className="text-3xl font-bold text-blue-800 mb-2 text-center">
           Create a Post
@@ -73,55 +72,56 @@ export default function PostForm() {
             />
             <div>
               <h3 className="font-semibold text-gray-900">John Doe</h3>
-              <p className="text-sm text-gray-500">Class of 2020 · B.Tech CSE</p>
+              <p className="text-sm text-gray-500">
+                Class of 2020 · B.Tech CSE
+              </p>
             </div>
           </div>
 
           {/* Post Content */}
-{/* Post Content */}
-<div className="space-y-2">
-  <label className="block text-sm font-semibold text-gray-700">
-    Post Content
-  </label>
-  <textarea
-    value={content}
-    onChange={(e) => setContent(e.target.value)}
-    placeholder="What's on your mind, John?"
-    rows="5"
-    className="w-full border border-blue-200 rounded-xl px-4 py-3 text-gray-700 text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none shadow-sm resize-none"
-    required
-  />
-</div>
+          {/* Post Content */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700">
+              Post Content
+            </label>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="What's on your mind, John?"
+              rows="5"
+              className="w-full border border-blue-200 rounded-xl px-4 py-3 text-gray-700 text-lg focus:ring-2 focus:ring-blue-400 focus:outline-none shadow-sm resize-none"
+              required
+            />
+          </div>
 
-{/* Image Upload */}
-<div className="space-y-2">
-  <label className="block text-sm font-semibold text-gray-700">
-    Attach Image (optional)
-  </label>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={handleImageChange}
-    className="block w-full text-sm text-gray-600
+          {/* Image Upload */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700">
+              Attach Image (optional)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="block w-full text-sm text-gray-600
                file:mr-4 file:py-2 file:px-4
                file:rounded-full file:border-0
                file:text-sm file:font-semibold
                file:bg-blue-50 file:text-blue-700
                hover:file:bg-blue-100"
-  />
+            />
 
-  {/* Image Preview */}
-  {preview && (
-    <div className="rounded-xl overflow-hidden shadow-md">
-      <img
-        src={preview}
-        alt="Preview"
-        className="w-full max-h-64 object-cover"
-      />
-    </div>
-  )}
-</div>
-
+            {/* Image Preview */}
+            {preview && (
+              <div className="rounded-xl overflow-hidden shadow-md">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-full max-h-64 object-cover"
+                />
+              </div>
+            )}
+          </div>
 
           {/* Buttons */}
           <div className="flex justify-end gap-4">
