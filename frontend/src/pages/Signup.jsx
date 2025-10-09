@@ -283,7 +283,7 @@ const navigate = useNavigate(); // ✅ added
             {isStudent && (
               <>
                <h3 className="text-lg font-semibold text-gray-700">
-                Alumni Details
+                Student Details
               </h3>
                 <SelectBox
                   name="currentYear"
