@@ -7,18 +7,19 @@ router.get("/", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT 
-         a.Alumni_ID,
-         u.User_Fname,
-         u.User_Lname,
-         a.Graduation_Year,
-         a.Course,
-         a.Department,
-         a.Job_Title,
-         a.Company_Name,
-         a.Skills,
-         a.Current_City
-       FROM Alumni_Table a
-       JOIN User_Table u ON a.User_ID = u.User_ID`
+   a.Alumni_ID,
+   u.User_Fname,
+   u.User_Lname,
+   a.Graduation_Year,
+   a.Course,
+   a.Department,
+   a.Job_Title,
+   a.Company_Name,
+   a.Current_City AS currentCity,
+   a.Skills AS skills
+FROM Alumni_Table a
+JOIN User_Table u ON a.User_ID = u.User_ID;
+`
     );
     res.json(rows);
   } catch (err) {
