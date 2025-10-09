@@ -14,7 +14,9 @@ router.get("/", async (req, res) => {
          a.Course,
          a.Department,
          a.Job_Title,
-         a.Company_Name
+         a.Company_Name,
+         a.Skills,
+         a.Current_City
        FROM Alumni_Table a
        JOIN User_Table u ON a.User_ID = u.User_ID`
     );
