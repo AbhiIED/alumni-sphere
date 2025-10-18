@@ -187,6 +187,7 @@ const navigate = useNavigate(); // ✅ added
                 onChange={handleChange}
                 required
               />
+              
               <InputField
                 type="text"
                 name="lastName"
@@ -283,7 +284,7 @@ const navigate = useNavigate(); // ✅ added
             {isStudent && (
               <>
                <h3 className="text-lg font-semibold text-gray-700">
-                Student Details
+                Alumni Details
               </h3>
                 <SelectBox
                   name="currentYear"

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import dpMale from "../Images/dp-male.png"; // ✅ default profile image
+import dpMale from "../Images/dp-male.png"; 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 const AlumniProfile = () => {
@@ -8,14 +8,23 @@ const AlumniProfile = () => {
   const [alumni, setAlumni] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/alumni")
-      .then((res) => res.json())
-      .then((data) => {
-        const found = data.find((a) => String(a.Alumni_ID) === String(id));
-        setAlumni(found);
-      })
-      .catch((err) => console.error(err));
-  }, [id]);
+  const token = localStorage.getItem("token"); 
+
+fetch("http://localhost:5000/alumni", {
+  headers: {
+    "Authorization": `Bearer ${token}`
+  }
+})
+.then(res => res.json())
+.then(data => {
+  console.log("Fetched alumni data:", data);
+  const found = data.find(a => String(a.Alumni_ID) === String(id));
+  setAlumni(found);
+})
+.catch(err => console.error(err));
+
+}, [id]);
+
 
   if (!alumni) {
     return (
@@ -27,7 +36,6 @@ const AlumniProfile = () => {
     );
   }
 
-  // ✅ Build full name safely
   const fullName = `${alumni.User_Fname || ""} ${
     alumni.User_Lname || ""
   }`.trim();
@@ -37,7 +45,6 @@ const AlumniProfile = () => {
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-16 px-6 mt-10">
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-          {/* Header */}
           <div className="flex items-center gap-6 p-8 border-b bg-amber-50">
             <img
               src={dpMale}
@@ -54,7 +61,6 @@ const AlumniProfile = () => {
             </div>
           </div>
 
-          {/* Details */}
           <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Job Title</h3>
@@ -68,15 +74,14 @@ const AlumniProfile = () => {
               <h3 className="text-lg font-semibold text-gray-800">
                 Current City
               </h3>
-              <p className="text-gray-600">{alumni.Current_City || "—"}</p>
+              <p className="text-gray-600">{alumni.currentCity || "—"}</p>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Skills</h3>
-              <p className="text-gray-600">{alumni.Skills || "—"}</p>
+              <p className="text-gray-600">{alumni.skills || "—"}</p>
             </div>
           </div>
 
-          {/* Call to Action */}
           <div className="p-8 border-t flex justify-end bg-amber-50">
             <button
               className="bg-amber-600 hover:bg-amber-700 focus:ring-amber-500 

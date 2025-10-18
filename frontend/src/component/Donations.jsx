@@ -13,7 +13,7 @@ export default function Donations() {
   useEffect(() => {
     const fetchCauses = async () => {
       try {
-        const res = await fetch("http://localhost:3000/donations");
+        const res = await fetch("http://localhost:5000/donations");
         if (!res.ok) throw new Error("Failed to fetch donation causes");
         const data = await res.json();
         setDonationCauses(data);
@@ -30,7 +30,6 @@ export default function Donations() {
     navigate(`/donations/${id}`);
   };
 
-  // ✅ Category color mapping
   const categoryColors = {
     Education: "bg-blue-600",
     Infrastructure: "bg-purple-600",
@@ -47,7 +46,7 @@ export default function Donations() {
     Health: "bg-pink-100",
   };
 
-  // Search + Filter
+  // Searchbar
   const filteredCauses = donationCauses.filter((cause) => {
     const matchesSearch =
       cause.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -61,9 +60,8 @@ export default function Donations() {
   });
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-12 px-6 mt-10">
+    <section className="min-h-screen bg-gradient-to-br  via-white py-12 px-6 mt-10">
       <div className="max-w-7xl mx-auto">
-        {/* Page Heading */}
         <h1 className="text-4xl font-bold text-amber-900 text-center mb-4">
           Alumni Donations
         </h1>
@@ -72,7 +70,6 @@ export default function Donations() {
           students.
         </p>
 
-        {/* Search & Filter Bar */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <div className="relative w-full sm:w-2/3 lg:w-1/2">
             <Search className="absolute left-3 top-3 text-gray-400" size={18} />
@@ -98,7 +95,6 @@ export default function Donations() {
           </select>
         </div>
 
-        {/* Loading / Error */}
         {loading && (
           <p className="text-center text-gray-500">Loading donation causes…</p>
         )}
@@ -108,7 +104,6 @@ export default function Donations() {
           </p>
         )}
 
-        {/* Donations Grid */}
         {!loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {filteredCauses.map((cause) => {
@@ -122,14 +117,12 @@ export default function Donations() {
                   key={cause.id}
                   className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-amber-300 hover:shadow-2xl"
                 >
-                  {/* Banner */}
                   <div className="relative">
                     <img
                       src={cause.image}
                       alt={cause.title}
                       className="h-40 w-full object-cover"
                     />
-                    {/* Category Badge */}
                     <span
                       className={`absolute top-3 left-3 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md ${
                         categoryColors[cause.category] || "bg-gray-600"
@@ -139,7 +132,6 @@ export default function Donations() {
                     </span>
                   </div>
 
-                  {/* Cause Info */}
                   <div className="p-6">
                     <h2 className="text-xl font-semibold text-gray-800 mb-2">
                       {cause.title}
@@ -148,7 +140,6 @@ export default function Donations() {
                       {cause.description}
                     </p>
 
-                    {/* Progress Bar */}
                     <div
                       className={`w-full rounded-full h-3 mb-4 ${
                         categoryLightColors[cause.category] || "bg-gray-200"
@@ -162,7 +153,6 @@ export default function Donations() {
                       ></div>
                     </div>
 
-                    {/* Stats */}
                     <div className="flex justify-between text-sm text-gray-500 mb-4">
                       <span>₹{cause.raised?.toLocaleString()} raised</span>
                       <span>Target: ₹{cause.target?.toLocaleString()}</span>
@@ -171,7 +161,6 @@ export default function Donations() {
                       {cause.supporters} alumni have contributed
                     </p>
 
-                    {/* Donate Button */}
                     <button
                       onClick={() => handleDonate(cause.id)}
                       className="flex items-center justify-center gap-2 w-full py-2 rounded-full bg-amber-600 text-white font-medium shadow-md hover:bg-amber-700 transition"
@@ -184,7 +173,6 @@ export default function Donations() {
               );
             })}
 
-            {/* No results */}
             {filteredCauses.length === 0 && (
               <p className="text-center text-gray-500 col-span-full">
                 No donation causes found.
