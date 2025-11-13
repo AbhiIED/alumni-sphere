@@ -129,4 +129,27 @@ router.post("/:postId/like", verifyToken, async (req, res) => {
   }
 });
 
+// ✅ Delete a Post
+router.delete("/:postId", verifyToken, async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    // Delete comments first (FK constraint)
+    await db.query("DELETE FROM Post_Comment WHERE Post_ID = ?", [postId]);
+
+    // Then delete the post
+    const [result] = await db.query("DELETE FROM Post WHERE Post_ID = ?", [postId]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
+
+    res.json({ success: true, message: "Post deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    res.status(500).json({ success: false, message: "Failed to delete post" });
+  }
+});
+
+
 module.exports = router;

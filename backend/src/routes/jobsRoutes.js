@@ -36,7 +36,6 @@ router.post("/", async (req, res) => {
       applyTo,
     } = req.body;
 
-    // Basic validation
     if (
       !title ||
       !company ||
@@ -50,10 +49,9 @@ router.post("/", async (req, res) => {
         .json({ error: "Please fill all required fields." });
     }
 
-    // Validate date range
     if (new Date(applyFrom) > new Date(applyTo)) {
       return res.status(400).json({
-        error: "Apply To date must be greater than or equal to Apply From date.",
+        error: "Apply To date must be greater than Apply From date.",
       });
     }
 
@@ -78,6 +76,31 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.error("❌ Error posting job:", err);
     res.status(500).json({ error: "Failed to post job" });
+  }
+});
+
+/* ===========================================================
+   DELETE JOB BY ID
+   =========================================================== */
+router.delete("/:id", async (req, res) => {
+  try {
+    const jobId = req.params.id;
+
+    // Delete job by ID
+    const [result] = await pool.query(
+      "DELETE FROM Job_Postings WHERE Job_ID = ?",
+      [jobId]
+    );
+
+    // If no rows deleted → job doesn't exist
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Job not found." });
+    }
+
+    res.json({ success: true, message: "Job deleted successfully!" });
+  } catch (err) {
+    console.error("❌ Error deleting job:", err);
+    res.status(500).json({ error: "Failed to delete job" });
   }
 });
 

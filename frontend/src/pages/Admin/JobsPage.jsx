@@ -29,22 +29,19 @@ export default function JobsPage() {
         const data = await res.json();
 
         const today = new Date();
-        const formattedJobs = data.map((j) => {
-          const status =
-            new Date(j.Apply_To) >= today ? "Active" : "Closed";
-          return {
-            id: j.Job_ID,
-            title: j.Job_Title,
-            company: j.Company_Name,
-            location: j.Location,
-            description: j.Description,
-            link: j.Application_Link,
-            applyFrom: j.Apply_From,
-            applyTo: j.Apply_To,
-            createdAt: j.Created_At,
-            status,
-          };
-        });
+        const formattedJobs = data.map((j) => ({
+          id: j.Job_ID,
+          title: j.Job_Title,
+          company: j.Company_Name,
+          location: j.Location,
+          description: j.Description,
+          link: j.Application_Link,
+          applyFrom: j.Apply_From,
+          applyTo: j.Apply_To,
+          createdAt: j.Created_At,
+          status: new Date(j.Apply_To) >= today ? "Active" : "Closed",
+        }));
+
         setJobs(formattedJobs);
       } catch (err) {
         console.error("Error fetching jobs:", err);
@@ -59,6 +56,35 @@ export default function JobsPage() {
       return () => clearTimeout(timer);
     }
   }, [message]);
+
+  // DELETE FUNCTION
+ const confirmDelete = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/jobs-api/${jobToDelete.id}`, {
+      method: "DELETE",
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setMessage("Failed to delete job.");
+      setMessageType("error");
+      return;
+    }
+
+    setJobs((prev) => prev.filter((job) => job.id !== jobToDelete.id));
+
+    setMessage(result.message);
+    setMessageType("success");
+    setShowDeleteDialog(false);
+
+  } catch (err) {
+    console.error(err);
+    setMessage("Error deleting job.");
+    setMessageType("error");
+  }
+};
+
 
   const handleDownloadPDF = (job) => {
     const doc = new jsPDF();
@@ -82,9 +108,13 @@ export default function JobsPage() {
     job.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+const [jobToDelete, setJobToDelete] = useState(null);
+
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      {/* ✅ Toast */}
+
       {message && (
         <div
           className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${
@@ -97,21 +127,18 @@ export default function JobsPage() {
 
       <Card className="max-w-6xl mx-auto shadow-lg">
         <CardHeader className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <CardTitle className="text-2xl font-semibold text-gray-800">💼 Manage Job Postings</CardTitle>
-          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-            <Input
-              placeholder="Search by title, company, or location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="border p-2 rounded"
-            />
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
-              + Add Job
-            </Button>
-          </div>
+          <CardTitle className="text-2xl font-semibold text-gray-800">
+            💼 Manage Job Postings
+          </CardTitle>
+
+          <Input
+            placeholder="Search by title, company, or location..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border p-2 rounded w-full md:w-80"
+          />
         </CardHeader>
 
-        {/* Table */}
         <CardContent>
           <Table>
             <TableHeader className="bg-gray-100">
@@ -135,58 +162,33 @@ export default function JobsPage() {
                     <TableCell>{job.title}</TableCell>
                     <TableCell>{job.company}</TableCell>
                     <TableCell>{job.location}</TableCell>
-                    <TableCell>{new Date(job.applyFrom).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "2-digit",
-                      })}
-                      <br />
-                      <span className="text-sm text-gray-500">
-                        {new Date(job.applyFrom).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </span></TableCell>
-                    <TableCell>{new Date(job.applyTo).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "2-digit",
-                      })}
-                      <br />
-                      <span className="text-sm text-gray-500">
-                        {new Date(job.applyTo).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </span></TableCell>
+
+                    <TableCell>{new Date(job.applyFrom).toLocaleString()}</TableCell>
+                    <TableCell>{new Date(job.applyTo).toLocaleString()}</TableCell>
+
                     <TableCell>
                       <Badge variant={job.status === "Active" ? "default" : "secondary"}>
                         {job.status}
                       </Badge>
                     </TableCell>
+
                     <TableCell className="text-center">
                       <div className="flex justify-center gap-3">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => { setSelectedJob(job); setShowViewDialog(true); }}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => { setSelectedJob(job); setShowViewDialog(true); }}>
                           View
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                        >
-                          Delete
-                        </Button>
+
+                       <Button
+  size="sm"
+  variant="destructive"
+  onClick={() => {
+    setJobToDelete(job);
+    setShowDeleteDialog(true);
+  }}
+>
+  Delete
+</Button>
+
                       </div>
                     </TableCell>
                   </TableRow>
@@ -203,29 +205,56 @@ export default function JobsPage() {
         </CardContent>
       </Card>
 
-      {/* 🔹 View Job */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <DialogHeader>
+    <DialogTitle>Confirm Deletion</DialogTitle>
+    <DialogDescription>
+      Are you sure you want to delete <strong>{jobToDelete?.title}</strong>?
+      This action cannot be undone.
+    </DialogDescription>
+  </DialogHeader>
+
+  <DialogFooter>
+    <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+      Cancel
+    </Button>
+    <Button variant="destructive" onClick={confirmDelete}>
+      Delete
+    </Button>
+  </DialogFooter>
+</Dialog>
+
+
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogHeader>
           <DialogTitle>{selectedJob?.title}</DialogTitle>
           <DialogDescription>Job Details</DialogDescription>
         </DialogHeader>
+
         <DialogContent>
           {selectedJob && (
             <div className="space-y-2 text-gray-700">
               <p><strong>Company:</strong> {selectedJob.company}</p>
               <p><strong>Location:</strong> {selectedJob.location}</p>
               <p><strong>Apply Period:</strong> {selectedJob.applyFrom} - {selectedJob.applyTo}</p>
-              <p><strong>Application Link:</strong> <a href={selectedJob.link} className="text-blue-600 underline" target="_blank" rel="noreferrer">{selectedJob.link}</a></p>
+              <p><strong>Application Link:</strong>
+                <a
+                  href={selectedJob.link}
+                  className="text-blue-600 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {selectedJob.link}
+                </a>
+              </p>
               <p><strong>Description:</strong></p>
               <p className="whitespace-pre-line">{selectedJob.description}</p>
             </div>
           )}
         </DialogContent>
+
         <DialogFooter>
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-            onClick={() => handleDownloadPDF(selectedJob)}
-          >
+          <Button className="bg-blue-600 text-white" onClick={() => handleDownloadPDF(selectedJob)}>
             📄 Download PDF
           </Button>
           <Button variant="outline" onClick={() => setShowViewDialog(false)}>
@@ -233,6 +262,7 @@ export default function JobsPage() {
           </Button>
         </DialogFooter>
       </Dialog>
+
     </div>
   );
 }

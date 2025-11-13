@@ -2,6 +2,8 @@
   import React from "react";
   import { NavLink, useNavigate } from "react-router-dom";
   import { Users, Calendar, Briefcase, MessageSquare, Settings, LogOut, Landmark } from "lucide-react";
+import Signup from "@/pages/Signup";
+import Loader from "@/pages/Loader";
 
   export default function AdminSidebar() {
     const navigate = useNavigate();
@@ -12,7 +14,6 @@
   { name: "Job Posts", icon: <Briefcase className="h-5 w-5 mr-3" />, path: "/admin-dashboard/jobs" },
   { name: "Posts", icon: <MessageSquare className="h-5 w-5 mr-3" />, path: "/admin-dashboard/posts" },
   { name: "Projects", icon: <Landmark className="h-5 w-5 mr-3" />, path: "/admin-dashboard/projects" },
-  { name: "Settings", icon: <Settings className="h-5 w-5 mr-3" />, path: "/admin-dashboard/settings" },
 
 ];
  
@@ -56,12 +57,14 @@
 
         {/* Logout Button */}
         <div className="p-6 border-t">
+          <NavLink to="/Loader">
           <button
             onClick={handleLogout}
             className="flex items-center w-full justify-center px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
           >
             <LogOut className="h-5 w-5 mr-2" /> Logout
           </button>
+          </NavLink>
         </div>
       </aside>
     );

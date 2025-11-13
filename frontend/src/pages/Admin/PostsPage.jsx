@@ -3,7 +3,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogHeader,
@@ -13,6 +12,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import jsPDF from "jspdf";
+import maledp from "@/Images/dp-male.png";
 
 export default function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -22,7 +22,6 @@ export default function PostsPage() {
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState("success");
 
-  // ✅ Fetch Posts from backend
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -58,7 +57,6 @@ export default function PostsPage() {
     fetchPosts();
   }, []);
 
-  // ✅ Toast auto-hide
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(null), 4000);
@@ -66,29 +64,34 @@ export default function PostsPage() {
     }
   }, [message]);
 
-  // ✅ Delete Post (Admin Action)
   const handleDeletePost = async (postId) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/posts/${postId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  try {
+    const token = localStorage.getItem("token");
 
-      if (res.ok) {
-        setPosts(posts.filter((p) => p.id !== postId));
-        setMessageType("success");
-        setMessage("🗑️ Post deleted successfully!");
-      } else {
-        setMessageType("error");
-        setMessage("❌ Failed to delete post.");
-      }
-    } catch (err) {
-      console.error("Delete Post Error:", err);
+    const res = await fetch(`http://localhost:5000/posts/${postId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
       setMessageType("error");
-      setMessage("❌ Server error while deleting post.");
+      setMessage(data.message || "❌ Failed to delete post.");
+      return;
     }
-  };
+
+    setPosts((prev) => prev.filter((p) => p.id !== postId));
+
+    setMessageType("success");
+    setMessage("🗑️ Post deleted successfully!");
+  } catch (err) {
+    console.error("Delete Post Error:", err);
+    setMessageType("error");
+    setMessage("❌ Server error while deleting post.");
+  }
+};
+
 
   // ✅ Export PDF Report
   const handleDownloadReport = (post) => {
@@ -115,6 +118,9 @@ export default function PostsPage() {
       post.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+const [postToDelete, setPostToDelete] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -164,7 +170,7 @@ export default function PostsPage() {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <img
-                          src={post.userImage || "/placeholder-user.png"}
+                          src={post.userImage || maledp}
                           alt={post.author}
                           className="w-10 h-10 rounded-full object-cover border"
                         />
@@ -190,12 +196,16 @@ export default function PostsPage() {
                           View
                         </Button>
                         <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDeletePost(post.id)}
-                        >
-                          Delete
-                        </Button>
+  size="sm"
+  variant="destructive"
+  onClick={() => {
+    setPostToDelete(post);
+    setShowDeleteDialog(true);
+  }}
+>
+  Delete
+</Button>
+
                       </div>
                     </TableCell>
                   </TableRow>
@@ -211,6 +221,31 @@ export default function PostsPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <DialogHeader>
+    <DialogTitle>Delete Post</DialogTitle>
+    <DialogDescription>
+      Are you sure you want to delete this post?
+    </DialogDescription>
+  </DialogHeader>
+
+  <DialogFooter>
+    <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+      Cancel
+    </Button>
+    <Button
+      variant="destructive"
+      onClick={() => {
+        handleDeletePost(postToDelete.id);
+        setShowDeleteDialog(false);
+      }}
+    >
+      Delete
+    </Button>
+  </DialogFooter>
+</Dialog>
+
 
       {/* 🔹 View Post Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>

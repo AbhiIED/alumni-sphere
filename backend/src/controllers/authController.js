@@ -22,13 +22,12 @@ exports.signin = async (req, res) => {
 
     const user = rows[0];
 
-    // ✅ Check password
     const validPassword = await bcrypt.compare(password, user.Password);
     if (!validPassword) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // ✅ Include role info in token
+    //Include role info in token
     const token = jwt.sign(
       { id: user.User_ID, email: user.Email_ID, role: user.User_Type_ID },
       process.env.JWT_SECRET || "secret123",
