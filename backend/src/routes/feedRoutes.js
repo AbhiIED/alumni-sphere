@@ -4,11 +4,13 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const db = require("../config/db");
-const auth = require("../middleware/authMiddleware");
+const { verifyToken } = require("../middleware/authMiddleware"); // ✅ FIXED
 
+// ✅ Ensure upload directory exists
 const uploadDir = path.join(__dirname, "../uploads/post_images");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
+// ✅ Configure multer for post images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) =>
@@ -16,7 +18,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post("/", auth, upload.single("image"), async (req, res) => {
+// ✅ Create new post
+router.post("/", verifyToken, upload.single("image"), async (req, res) => {
   const { content } = req.body;
   const userId = req.user.id;
 
@@ -30,22 +33,18 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
       [userId]
     );
 
-    if (!userRows.length) return res.status(404).json({ success: false, error: "User not found" });
+    if (!userRows.length)
+      return res.status(404).json({ success: false, error: "User not found" });
 
     const user = userRows[0];
     const profilePic = user.Profile_Pic ? `http://localhost:5000${user.Profile_Pic}` : null;
 
     let imageUrl = null;
-    if (req.file) {
-      imageUrl = `/uploads/post_images/${req.file.filename}`;
-    }
+    if (req.file) imageUrl = `/uploads/post_images/${req.file.filename}`;
 
     const [result] = await db.query(
       `INSERT INTO Post (Alumni_ID, Content, Image_URL, Created_At, Likes_Count, Comment_Count)
-       VALUES (
-         (SELECT Alumni_ID FROM Alumni_Table WHERE User_ID = ?),
-         ?, ?, NOW(), 0, 0
-       )`,
+       VALUES ((SELECT Alumni_ID FROM Alumni_Table WHERE User_ID = ?), ?, ?, NOW(), 0, 0)`,
       [userId, content, imageUrl]
     );
 

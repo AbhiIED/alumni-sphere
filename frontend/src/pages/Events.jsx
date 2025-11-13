@@ -14,7 +14,7 @@ export default function EventSection() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/events-api");
+        const res = await fetch("http://localhost:5000/events");
         const data = await res.json();
         console.log("Fetched events:", data);
         if (Array.isArray(data)) {

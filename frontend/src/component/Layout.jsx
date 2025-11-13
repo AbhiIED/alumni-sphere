@@ -1,13 +1,13 @@
-// src/Layout.jsx
+// src/component/Layout.jsx
 import React, { useEffect, useRef } from "react";
 import LocomotiveScroll from "locomotive-scroll";
-import { useLocation } from "react-router-dom";
+import { useLocation, Outlet } from "react-router-dom";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const scrollRef = useRef(null);
-  const location = useLocation(); // detects route change
-  const locoScroll = useRef(null); // store scroll instance
+  const location = useLocation(); 
+  const locoScroll = useRef(null);
 
   useEffect(() => {
     locoScroll.current = new LocomotiveScroll({
@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // Refresh Locomotive on route change (after slight delay to load new content)
+    // Refresh LocomotiveScroll on route change
     setTimeout(() => {
       locoScroll.current?.update();
     }, 100);
@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
 
   return (
     <div data-scroll-container ref={scrollRef} className="overflow-hidden">
-      {children}
+      <Outlet /> {/* ✅ Required for nested route rendering */}
     </div>
   );
 };

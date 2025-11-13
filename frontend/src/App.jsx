@@ -10,48 +10,68 @@ import Feed from "./pages/Feed";
 import CreatePost from "./pages/CreatePost";
 import ConnectionPage from "./pages/ConnectionPage";
 import DonationPage from "./pages/DonationPage";
-import AlumniProfile from "./component/AlumniProfile"; // ✅ fixed
+import AlumniProfile from "./component/AlumniProfile";
 import RegisterPage from "./pages/RegisterPage";
-import NewsDeatils from "./pages/NewsDetails";
+import NewsDetails from "./pages/NewsDetails";
 import Events from "./pages/Events";
 import JobsPage from "./pages/JobsPage";
-import Layout from "./component/Layout"; // ✅ fixed
+import Layout from "./component/Layout";
 import ForgotPassword from "./pages/Forgot-password";
 import DonationDetails from "./pages/DonationDetails";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import UsersPage from "./pages/Admin/UsersPage";
+import JobPage from "./pages/Admin/JobsPage";
+import EventsPage from "./pages/Admin/EventsPage";
+import PostsPage from "./pages/Admin/PostsPage";
+import ProjectsPage from "./pages/Admin/ProjectsPage";
+import ProtectedRoute from "./component/ProtectedRoute"; // ⚙️ New file added below
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Public / User Routes */}
         <Route path="/" element={<Loader />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/homepage" element={<Layout><Homepage /></Layout>} />
-        <Route path="/manage-account" element={<Layout><ManageAccount /></Layout>} />
-        <Route path="/directory" element={<Layout><Directory /></Layout>} />
-        <Route path="/feed" element={<Layout><Feed /></Layout>} />
-        <Route path="/create-post" element={<Layout><CreatePost /></Layout>} />
-        <Route path="/connections" element={<Layout><ConnectionPage /></Layout>} />
-        <Route path="/donations" element={<Layout><DonationPage /></Layout>} />
-         <Route
-          path="/donations/:id"
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Layout wrapped routes */}
+        <Route element={<Layout />}>
+          <Route path="/homepage" element={<Homepage />} />
+          <Route path="/manage-account" element={<ManageAccount />} />
+          <Route path="/directory" element={<Directory />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/connections" element={<ConnectionPage />} />
+          <Route path="/donations" element={<DonationPage />} />
+          <Route path="/donations/:id" element={<DonationDetails />} />
+          <Route path="/alumni/:id" element={<AlumniProfile />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/all-news" element={<NewsDetails />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/jobs" element={<JobsPage />} />
+        </Route>
+
+        {/* ✅ Admin Dashboard with Nested Routes */}
+        <Route
+          path="/admin-dashboard"
           element={
-            <Layout>
-              <DonationDetails />
-            </Layout>
+            <ProtectedRoute requiredRole={3}>
+              <AdminDashboard />
+            </ProtectedRoute>
           }
-        />
-        <Route path="/alumni/:id" element={<Layout><AlumniProfile /></Layout>} />
-        <Route path="/register" element={<Layout><RegisterPage /></Layout>} />
-
-        <Route path="/all-news" element={<NewsDeatils />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/jobs" element={<JobsPage />} />
-        <Route path="/Forgot-password" element={<ForgotPassword />} />
-
+        >
+          <Route index element={<UsersPage />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="events" element={<EventsPage />} />
+          <Route path="jobs" element={<JobPage />} />
+          <Route path="posts" element={<PostsPage />} />
+          <Route path="projects" element={<ProjectsPage />} />
+        </Route>
       </Routes>
     </Router>
   );
 }
 
-export default App; 
+export default App;

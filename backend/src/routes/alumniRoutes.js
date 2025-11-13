@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../config/db");
-const auth = require("../middleware/authMiddleware");
+const { verifyToken } = require("../middleware/authMiddleware");
 
-router.get("/", auth, async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const currentUserId = req.user.id;
 

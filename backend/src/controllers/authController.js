@@ -7,9 +7,12 @@ exports.signin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Query user by email
+    // ✅ Join User_Table with User_Type_Table
     const [rows] = await pool.query(
-      "SELECT * FROM User_Table WHERE Email_ID = ?",
+      `SELECT u.*, ut.User_Type_name 
+       FROM User_Table u 
+       JOIN User_Type_Table ut ON u.User_Type_ID = ut.User_Type_ID 
+       WHERE u.Email_ID = ?`,
       [email]
     );
 
@@ -19,13 +22,15 @@ exports.signin = async (req, res) => {
 
     const user = rows[0];
 
+    // ✅ Check password
     const validPassword = await bcrypt.compare(password, user.Password);
     if (!validPassword) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
+    // ✅ Include role info in token
     const token = jwt.sign(
-      { id: user.User_ID, email: user.Email_ID },
+      { id: user.User_ID, email: user.Email_ID, role: user.User_Type_ID },
       process.env.JWT_SECRET || "secret123",
       { expiresIn: "1h" }
     );
@@ -42,7 +47,6 @@ exports.signin = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 
 //SIGNUP

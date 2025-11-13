@@ -27,6 +27,8 @@ exports.getUserProfile = async (req, res) => {
       [userId]
     );
 
+
+    
     if (!rows.length) return res.status(404).json({ error: "User not found" });
 
     const user = rows[0];

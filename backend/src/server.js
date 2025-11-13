@@ -39,6 +39,11 @@ const jobsRoutes = require("./routes/jobsRoutes");
 const profileRoutes = require("./routes/profileRoutes"); // 👈 NEW (ManageAccount)
 const feedRoutes = require("./routes/feedRoutes");
 const donationRoutes = require("./routes/donationRoutes");
+const aProjectRoutes = require("./routes/adminProjectRoutes");
+const usersRoute = require("./routes/usersRoutes");
+const adminDashboardRoutes = require("./routes/adminDashboard");
+
+
 
 
 // ✅ Use Routes
@@ -46,11 +51,15 @@ app.use("/auth", authRoutes);
 app.use("/alumni", alumniRoutes);
 app.use("/alumni-hero", alumniHeroRoutes);
 app.use("/posts", postRoutes);
-app.use("/events-api", eventRoutes);
+app.use("/events", eventRoutes);
 app.use("/jobs-api", jobsRoutes);
 app.use("/api/user", profileRoutes); // 👈 New endpoint for ManageAccount page
 app.use("/feeds", feedRoutes); // Feed related routes
 app.use("/donations", donationRoutes);
+app.use("/admin-projects", aProjectRoutes);
+app.use("/users", usersRoute);
+app.use("/admin-dashboard", adminDashboardRoutes);
+
 
 // ✅ Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
-const auth = require("../middleware/authMiddleware");
+const { verifyToken } = require("../middleware/authMiddleware"); // ✅ FIXED
 
-router.get("/", auth, async (req, res) => {
+// ✅ Fetch All Posts
+router.get("/", verifyToken, async (req, res) => {
   try {
     const [posts] = await db.query(`
       SELECT 
@@ -34,8 +35,8 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-
-router.get("/:postId/comments", auth, async (req, res) => {
+// ✅ Get Comments for a Post
+router.get("/:postId/comments", verifyToken, async (req, res) => {
   const { postId } = req.params;
 
   try {
@@ -63,7 +64,8 @@ router.get("/:postId/comments", auth, async (req, res) => {
   }
 });
 
-router.post("/:postId/comments", auth, async (req, res) => {
+// ✅ Add a Comment
+router.post("/:postId/comments", verifyToken, async (req, res) => {
   const { postId } = req.params;
   const { commentText } = req.body;
   const userId = req.user.id;
@@ -101,7 +103,7 @@ router.post("/:postId/comments", auth, async (req, res) => {
         Comment_Date: new Date(),
         User_Fname: user.User_Fname,
         User_Lname: user.User_Lname,
-        User_Image: user.User_Image || null,
+        User_Image: user.Profile_Pic || null,
       },
     });
   } catch (err) {
@@ -110,7 +112,8 @@ router.post("/:postId/comments", auth, async (req, res) => {
   }
 });
 
-router.post("/:postId/like", auth, async (req, res) => {
+// ✅ Like a Post
+router.post("/:postId/like", verifyToken, async (req, res) => {
   const { postId } = req.params;
 
   try {

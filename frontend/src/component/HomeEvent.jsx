@@ -7,7 +7,7 @@ export default function HeroSection() {
   useEffect(() => {
     const fetchLatestEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/events-api?type=latest");
+        const res = await fetch("http://localhost:5000/events?type=latest");
         const data = await res.json();
         setLatestEvents(data);
       } catch (err) {
