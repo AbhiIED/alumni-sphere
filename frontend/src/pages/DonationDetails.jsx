@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-
+import Footer from "../component/Footer";
+import Navbar from "../component/Navbar";
 export default function DonationDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function DonationDetails() {
   useEffect(() => {
     const fetchCause = async () => {
       try {
-        const res = await fetch(`${baseUrl}/donations/${id}`);
+        const res = await fetch(`http://localhost:5000/donations/${id}`);
         if (!res.ok) throw new Error("Failed to fetch cause details");
         const data = await res.json();
         setCause(data);
@@ -78,8 +79,9 @@ export default function DonationDetails() {
     return <p className="text-center mt-10 text-gray-500">Cause not found.</p>;
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-12 px-6">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+    <> <Navbar/>
+    <section className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-6 px-6 mt-10">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden mt-12">
         <div className="relative">
           <img
             src={cause.image}
@@ -131,5 +133,7 @@ export default function DonationDetails() {
         </div>
       </div>
     </section>
+    <Footer/>
+    </>
   );
 }

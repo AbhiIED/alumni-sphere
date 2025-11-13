@@ -60,7 +60,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Donation not found" });
     }
 
-    res.json(rows[0]);
+    res.json(rows[0]); 
   } catch (err) {
     console.error("Error fetching project by ID:", err);
     res.status(500).json({ error: "Server error" });

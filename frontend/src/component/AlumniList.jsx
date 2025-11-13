@@ -7,14 +7,26 @@ const AlumniList = () => {
   const [alumni, setAlumni] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/alumni")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Fetched alumni:", data); // ✅ check keys here
-        setAlumni(data);
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/signin");
+      return;
+    }
+
+    fetch("http://localhost:5000/alumni", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          navigate("/signin");
+          throw new Error("Unauthorized");
+        }
+        return res.json();
       })
+      .then((data) => setAlumni(data))
       .catch((err) => console.error("Error fetching alumni:", err));
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="space-y-4">
@@ -25,7 +37,7 @@ const AlumniList = () => {
           style={{ cursor: "pointer" }}
         >
           <AlumniDir
-            name={`${item.User_Fname} ${item.User_Lname}`} // ✅ combine first + last
+            name={`${item.User_Fname} ${item.User_Lname}`}
             graduationYear={item.Graduation_Year}
             course={`${item.Course} ${item.Department}`}
             jobTitle={item.Job_Title}

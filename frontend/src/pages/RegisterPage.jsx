@@ -45,16 +45,13 @@ const RegisterPage = () => {
     <>
       <Navbar />
       <div
-        data-scroll
-        data-scroll-container
+        
         className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-16 px-6 mt-6"
       >
         <div
-          data-scroll
-          data-scroll-speed="1"
+         
           className="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-10 border border-gray-200"
         >
-          {/* Event Heading */}
           <h1 className="text-4xl font-bold text-center text-amber-800 mb-4">
             {eventName || "Event Registration"}
           </h1>
@@ -66,9 +63,7 @@ const RegisterPage = () => {
             .
           </p>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Full Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Full Name
@@ -83,7 +78,6 @@ const RegisterPage = () => {
               />
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Email
@@ -98,7 +92,6 @@ const RegisterPage = () => {
               />
             </div>
 
-            {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Phone Number
@@ -113,7 +106,6 @@ const RegisterPage = () => {
               />
             </div>
 
-            {/* Graduation Year */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Graduation Year
@@ -127,7 +119,6 @@ const RegisterPage = () => {
               />
             </div>
 
-            {/* Course */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Course
@@ -141,7 +132,6 @@ const RegisterPage = () => {
               />
             </div>
 
-            {/* Event Name (readonly) */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Event Name
@@ -155,7 +145,6 @@ const RegisterPage = () => {
               />
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-center">
               <button
                 type="submit"

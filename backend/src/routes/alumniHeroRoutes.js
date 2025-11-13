@@ -10,28 +10,32 @@ router.get("/", auth, async (req, res) => {
     const [rows] = await pool.query(
       `
       SELECT 
-        a.Alumni_ID,
-        u.User_ID,
         u.User_Fname,
         u.User_Lname,
-        u.Email_ID,
         a.Graduation_Year,
         a.Course,
-        a.Department,
-        a.Job_Title,
-        a.Company_Name,
-        a.Current_City AS currentCity,
-        a.Skills AS skills
+        IFNULL(u.Profile_Pic, '/uploads/profile_pics/default_male.png') AS Profile_Pic
       FROM Alumni_Table a
       JOIN User_Table u ON a.User_ID = u.User_ID
-      WHERE u.User_ID != ?;
+      WHERE a.Course = "MCA" AND u.User_ID != ?
+      ORDER BY a.Graduation_Year DESC
+      LIMIT 20;
       `,
       [currentUserId]
     );
 
-    res.json(rows);
+    // Generate full URLs
+    const alumni = rows.map((row) => ({
+      name: `${row.User_Fname} ${row.User_Lname}`,
+      course: `${row.Course} ${row.Graduation_Year}`,
+      img: row.Profile_Pic.startsWith("http")
+        ? row.Profile_Pic
+        : `http://localhost:5000${row.Profile_Pic}`,
+    }));
+
+    res.json(alumni);
   } catch (err) {
-    console.error("Error fetching alumni:", err);
+    console.error("Error fetching alumni for HeroSection:", err);
     res.status(500).json({ error: "Failed to fetch alumni" });
   }
 });
