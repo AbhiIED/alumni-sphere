@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import fallbackImage from "../Images/event-image.webp";
 export default function HeroSection() {
   const [latestEvents, setLatestEvents] = useState([]);
 
@@ -44,7 +44,7 @@ export default function HeroSection() {
             <article key={event.Event_ID} className="flex flex-col lg:flex-row items-start gap-6">
               <div className="w-full lg:w-1/4">
                 <img
-                  src={event.Event_Image}
+                  src={event.Event_Image || fallbackImage}
                   alt={event.Event_Name}
                   className="rounded-xl object-cover w-full h-40"
                 />

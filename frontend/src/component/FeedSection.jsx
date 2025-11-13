@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ThumbsUp, MessageCircle, Share2 } from "lucide-react";
-
+import maledp from "../Images/dp-male.png";
 export default function FeedSection() {
   const [posts, setPosts] = useState([]);
   const [openComments, setOpenComments] = useState({});
@@ -134,7 +134,7 @@ export default function FeedSection() {
           >
             <div className="flex items-center gap-4 mb-4">
               <img
-                src={post.User_Image}
+                src={post.User_Image || maledp}
                 alt={post.User_Fname}
                 className="w-12 h-12 rounded-full object-cover border border-blue-200"
               />

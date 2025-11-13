@@ -1,70 +1,109 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay, EffectCoverflow } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  EffectCoverflow,
+} from "swiper/modules";
 import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
+import fallbackImage from "../Images/event-image.webp";
+
+
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 
 export default function EventSection() {
-  const [events, setEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [expiredEvents, setExpiredEvents] = useState([]);
+
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const res = await fetch("http://localhost:5000/events");
         const data = await res.json();
-        console.log("Fetched events:", data);
+
         if (Array.isArray(data)) {
-          data.sort((a, b) => new Date(a.Event_Date) - new Date(b.Event_Date));
-          setEvents(data);
+          const today = new Date();
+
+          const upcoming = data
+            .filter((e) => new Date(e.Event_Date) >= today)
+            .sort((a, b) => new Date(a.Event_Date) - new Date(b.Event_Date));
+
+          const expired = data
+            .filter((e) => new Date(e.Event_Date) < today)
+            .sort((a, b) => new Date(b.Event_Date) - new Date(a.Event_Date));
+
+          setUpcomingEvents(upcoming);
+          setExpiredEvents(expired);
         }
       } catch (err) {
         console.error("Error fetching events:", err);
       }
     };
+
     fetchEvents();
   }, []);
 
   return (
     <>
       <Navbar />
+
+      {/* SECTION: UPCOMING EVENTS */}
       <section className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-amber-900">Upcoming Alumni Events</h2>
+            <h2 className="text-4xl font-bold text-amber-900">
+              Upcoming Alumni Events 🌟
+            </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Stay connected through reunions, conferences, and networking opportunities.
+              Stay connected through reunions, conferences, and networking
+              opportunities.
             </p>
           </div>
 
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
-            effect="coverflow"
-            grabCursor
-            centeredSlides
-            slidesPerView="auto"
-            loop
-            autoplay={{ delay: 4000 }}
-            pagination={{ clickable: true }}
-            navigation
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 0,
-              depth: 150,
-              modifier: 2,
-              slideShadows: false,
-            }}
-            className="pb-12"
-          >
-            {events.length > 0 ? (
-              events.map((event, index) => (
-                <SwiperSlide key={index} className="!w-[350px] sm:!w-[400px] lg:!w-[480px]">
-                  <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          {!upcomingEvents.length ? (
+            <p className="text-center text-gray-600 py-10 text-lg">
+              No upcoming events at the moment.
+            </p>
+          ) : (
+            <Swiper
+              modules={[
+                Navigation,
+                Pagination,
+                Autoplay,
+                EffectCoverflow,
+              ]}
+              effect="coverflow"
+              grabCursor
+              centeredSlides
+              slidesPerView="auto"
+              loop
+              autoplay={{ delay: 3500 }}
+              navigation
+              pagination={{ clickable: true }}
+              coverflowEffect={{
+                rotate: 0,
+                stretch: 0,
+                depth: 180,
+                modifier: 2.5,
+                slideShadows: false,
+              }}
+              className="pb-12"
+            >
+              {upcomingEvents.map((event, index) => (
+                <SwiperSlide
+                  key={index}
+                  className="!w-[350px] sm:!w-[400px] lg:!w-[480px]"
+                >
+                  <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition">
                     <img
-                      src={event.Event_Image}
+                      src={event.Event_Image || fallbackImage}
+                      onError={(e) => (e.target.src = fallbackImage)}
                       alt={event.Event_Name}
                       className="w-full h-48 object-cover"
                     />
@@ -89,15 +128,58 @@ export default function EventSection() {
                     </div>
                   </div>
                 </SwiperSlide>
-              ))
-            ) : (
-              <SwiperSlide>
-                <div className="text-center py-10 text-gray-500">Loading events...</div>
-              </SwiperSlide>
-            )}
-          </Swiper>
+              ))}
+            </Swiper>
+          )}
         </div>
       </section>
+
+      {/* SECTION: EXPIRED EVENTS */}
+      <section className="bg-white py-16 px-6 border-t border-amber-200">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
+            Past Events 📅
+          </h2>
+
+          {expiredEvents.length === 0 ? (
+            <p className="text-center text-gray-500">No past events.</p>
+          ) : (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {expiredEvents.map((event) => (
+                <div
+                  key={event.Event_ID}
+                  className="bg-gray-50 rounded-xl border shadow hover:shadow-md transition overflow-hidden"
+                >
+                  <img
+                    src={event.Event_Image || fallbackImage}
+                    onError={(e) => (e.target.src = fallbackImage)}
+                    alt={event.Event_Name}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-5">
+                    <h3 className="font-semibold text-lg text-gray-800">
+                      {event.Event_Name}
+                    </h3>
+
+                    <p className="text-sm text-gray-500 mt-1">
+                      {new Date(event.Event_Date).toLocaleDateString()}
+                    </p>
+
+                    <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+                      {event.Event_Description}
+                    </p>
+
+                    <p className="mt-4 inline-block text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full font-medium">
+                      Expired Event
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       <Footer />
     </>
   );
