@@ -25,13 +25,13 @@ export default function ForgotPassword() {
       const res = await fetch("http://localhost:5000/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, purpose: "reset_password" }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setMessage(data.message || "OTP sent to your email.");
+        setMessage(data.otp ? `OTP sent. Dev OTP: ${data.otp}` : data.message || "OTP sent to your email.");
         setStep(2);
       } else {
         setError(data.error || "Failed to send OTP.");
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
       const res = await fetch("http://localhost:5000/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ email, otp, purpose: "reset_password" }),
       });
 
       const data = await res.json();

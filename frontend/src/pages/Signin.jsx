@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../Images/logo.png";
 
 export default function Signin() {
@@ -7,10 +7,12 @@ export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSignin = async (e) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
     try {
       const res = await fetch("http://localhost:5000/auth/signin", {
@@ -22,15 +24,13 @@ export default function Signin() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Save token and user info
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // ✅ Redirect based on user type
         if (data.user.User_Type_ID === 3) {
-          navigate("/admin-dashboard"); // Admin user
+          navigate("/admin-dashboard");
         } else {
-          navigate("/homepage"); // Regular user (student/alumni)
+          navigate("/homepage");
         }
       } else {
         setError(data.error || "Login failed");
@@ -38,40 +38,33 @@ export default function Signin() {
     } catch (err) {
       console.error("Signin error:", err);
       setError("Something went wrong, please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex h-screen w-full">
-      {/* Left Section */}
-      <div className="w-1/2 bg-indigo-700 text-white flex flex-col justify-center items-center p-10">
+    <div className="min-h-screen w-full bg-gray-100 lg:grid lg:grid-cols-2">
+      <div className="hidden bg-indigo-700 text-white lg:flex flex-col justify-center items-center p-10">
         <img
           src={logo}
           alt="Alumni Logo"
           className="h-32 w-32 mb-6 drop-shadow-lg"
         />
-        <h1 className="text-3xl font-bold text-center">
-          Welcome Back to Alumni Sphere
-        </h1>
+        <h1 className="text-3xl font-bold text-center">Welcome Back to Alumni Sphere</h1>
         <p className="text-center mt-4 text-indigo-100 max-w-sm">
-          Reconnect with your network, stay updated, and continue your journey
-          with us.
+          Reconnect with your network, stay updated, and continue your journey with us.
         </p>
       </div>
 
-      {/* Right Section */}
-      <div className="w-1/2 bg-gray-100 flex items-center justify-center p-10">
+      <div className="flex items-center justify-center p-6 sm:p-10">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-            Sign In to Your Account
-          </h2>
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Sign In</h2>
+          <p className="text-sm text-gray-500 text-center mb-8">Access your Alumni Sphere account.</p>
 
           <form onSubmit={handleSignin} className="space-y-6">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-900 mb-1"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">
                 Email address
               </label>
               <input
@@ -85,10 +78,7 @@ export default function Signin() {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-900 mb-1"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-1">
                 Password
               </label>
               <input
@@ -104,7 +94,7 @@ export default function Signin() {
             <div className="text-right">
               <button
                 type="button"
-                onClick={() => navigate("/Forgot-password")}
+                onClick={() => navigate("/forgot-password")}
                 className="text-sm text-indigo-700 hover:underline focus:outline-none"
               >
                 Forgot Password?
@@ -115,11 +105,19 @@ export default function Signin() {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold text-lg shadow-md hover:bg-indigo-700 hover:scale-[1.02] transform transition"
+              disabled={isSubmitting}
+              className="w-full py-3 rounded-lg bg-indigo-600 text-white font-semibold text-lg shadow-md hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transform transition"
             >
-              Sign In
+              {isSubmitting ? "Signing In..." : "Sign In"}
             </button>
           </form>
+
+          <p className="text-sm text-center text-gray-600 mt-6">
+            Don&apos;t have an account?{" "}
+            <Link to="/signup" className="font-semibold text-indigo-700 hover:underline">
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
