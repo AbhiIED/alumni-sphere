@@ -23,7 +23,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.13",
     "heroicons": "^2.2.0",
-    "jspdf": "^3.0.3",
+    "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.2",
     "locomotive-scroll": "^4.1.4",
     "lucide-react": "^0.542.0",

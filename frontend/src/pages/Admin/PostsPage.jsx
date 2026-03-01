@@ -26,7 +26,8 @@ export default function PostsPage() {
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/posts", {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        const res = await fetch(`${API_BASE_URL}/posts`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -65,35 +66,35 @@ export default function PostsPage() {
   }, [message]);
 
   const handleDeletePost = async (postId) => {
-  try {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
-    const res = await fetch(`http://localhost:5000/posts/${postId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const res = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
+      if (!res.ok) {
+        setMessageType("error");
+        setMessage(data.message || "❌ Failed to delete post.");
+        return;
+      }
+
+      setPosts((prev) => prev.filter((p) => p.id !== postId));
+
+      setMessageType("success");
+      setMessage("🗑️ Post deleted successfully!");
+    } catch (err) {
+      console.error("Delete Post Error:", err);
       setMessageType("error");
-      setMessage(data.message || "❌ Failed to delete post.");
-      return;
+      setMessage("❌ Server error while deleting post.");
     }
-
-    setPosts((prev) => prev.filter((p) => p.id !== postId));
-
-    setMessageType("success");
-    setMessage("🗑️ Post deleted successfully!");
-  } catch (err) {
-    console.error("Delete Post Error:", err);
-    setMessageType("error");
-    setMessage("❌ Server error while deleting post.");
-  }
-};
+  };
 
 
-  // ✅ Export PDF Report
   const handleDownloadReport = (post) => {
     const doc = new jsPDF();
     doc.setFontSize(18);
@@ -111,7 +112,6 @@ export default function PostsPage() {
     doc.save(`${post.author}_Post_Report.pdf`);
   };
 
-  // ✅ Search
   const filteredPosts = posts.filter(
     (post) =>
       post.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -120,16 +120,14 @@ export default function PostsPage() {
   );
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-const [postToDelete, setPostToDelete] = useState(null);
+  const [postToDelete, setPostToDelete] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      {/* ✅ Toast Notification */}
       {message && (
         <div
-          className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${
-            messageType === "success" ? "bg-green-600" : "bg-red-600"
-          }`}
+          className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${messageType === "success" ? "bg-green-600" : "bg-red-600"
+            }`}
         >
           {message}
         </div>
@@ -196,15 +194,15 @@ const [postToDelete, setPostToDelete] = useState(null);
                           View
                         </Button>
                         <Button
-  size="sm"
-  variant="destructive"
-  onClick={() => {
-    setPostToDelete(post);
-    setShowDeleteDialog(true);
-  }}
->
-  Delete
-</Button>
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => {
+                            setPostToDelete(post);
+                            setShowDeleteDialog(true);
+                          }}
+                        >
+                          Delete
+                        </Button>
 
                       </div>
                     </TableCell>
@@ -223,28 +221,28 @@ const [postToDelete, setPostToDelete] = useState(null);
       </Card>
 
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-  <DialogHeader>
-    <DialogTitle>Delete Post</DialogTitle>
-    <DialogDescription>
-      Are you sure you want to delete this post?
-    </DialogDescription>
-  </DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Delete Post</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete this post?
+          </DialogDescription>
+        </DialogHeader>
 
-  <DialogFooter>
-    <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
-      Cancel
-    </Button>
-    <Button
-      variant="destructive"
-      onClick={() => {
-        handleDeletePost(postToDelete.id);
-        setShowDeleteDialog(false);
-      }}
-    >
-      Delete
-    </Button>
-  </DialogFooter>
-</Dialog>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={() => {
+              handleDeletePost(postToDelete.id);
+              setShowDeleteDialog(false);
+            }}
+          >
+            Delete
+          </Button>
+        </DialogFooter>
+      </Dialog>
 
 
       {/* 🔹 View Post Dialog */}

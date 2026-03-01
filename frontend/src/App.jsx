@@ -10,13 +10,14 @@ import Feed from "./pages/Feed";
 import CreatePost from "./pages/CreatePost";
 import ConnectionPage from "./pages/ConnectionPage";
 import DonationPage from "./pages/DonationPage";
-import AlumniProfile from "./component/AlumniProfile";
+import AlumniProfile from "./components/AlumniProfile";
 import RegisterPage from "./pages/RegisterPage";
 import NewsDetails from "./pages/NewsDetails";
 import Events from "./pages/Events";
 import JobsPage from "./pages/JobsPage";
-import Layout from "./component/Layout";
+import Layout from "./components/Layout";
 import ForgotPassword from "./pages/Forgot-password";
+import OtpVerification from "./pages/OtpVerification";
 import DonationDetails from "./pages/DonationDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import UsersPage from "./pages/Admin/UsersPage";
@@ -24,7 +25,7 @@ import JobPage from "./pages/Admin/JobsPage";
 import EventsPage from "./pages/Admin/EventsPage";
 import PostsPage from "./pages/Admin/PostsPage";
 import ProjectsPage from "./pages/Admin/ProjectsPage";
-import ProtectedRoute from "./component/ProtectedRoute"; // ⚙️ New file added below
+import ProtectedRoute from "./components/ProtectedRoute"; // ⚙️ New file added below
 
 function App() {
   return (
@@ -35,9 +36,16 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<OtpVerification />} />
 
-        {/* Layout wrapped routes */}
-        <Route element={<Layout />}>
+        {/* Layout wrapped routes (protected - requires login) */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/homepage" element={<Homepage />} />
           <Route path="/manage-account" element={<ManageAccount />} />
           <Route path="/directory" element={<Directory />} />

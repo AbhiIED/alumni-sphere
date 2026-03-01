@@ -22,7 +22,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/auth/send-otp", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, purpose: "reset_password" }),
@@ -51,7 +52,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/auth/verify-otp", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp, purpose: "reset_password" }),
@@ -73,7 +75,7 @@ export default function ForgotPassword() {
     }
   };
 
-  
+
   const resetPassword = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -86,7 +88,8 @@ export default function ForgotPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/auth/reset-password", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp, newPassword }),

@@ -41,11 +41,11 @@ export default function EventsPage() {
 
   const [editEvent, setEditEvent] = useState({});
 
-  // ✅ Fetch all events from backend
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/events");
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        const res = await fetch(`${API_BASE_URL}/events`);
         const data = await res.json();
 
         setEvents(
@@ -67,7 +67,6 @@ export default function EventsPage() {
     fetchEvents();
   }, []);
 
-  // ✅ Auto-hide messages
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(null), 4000);
@@ -75,7 +74,6 @@ export default function EventsPage() {
     }
   }, [message]);
 
-  // ✅ Add Event
   const handleAddEvent = async () => {
     if (!newEvent.name || !newEvent.date || !newEvent.location) {
       setMessageType("error");
@@ -98,7 +96,8 @@ export default function EventsPage() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/events", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,12 +133,12 @@ export default function EventsPage() {
     }
   };
 
-  // ✅ Edit Event
   const handleEditSave = async () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:5000/events/${editEvent.id}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/events/${editEvent.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -173,11 +172,11 @@ export default function EventsPage() {
     }
   };
 
-  // ✅ Delete Event
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:5000/events/${selectedEvent.id}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/events/${selectedEvent.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -214,7 +213,6 @@ export default function EventsPage() {
     doc.save(`${event.name}_Report.pdf`);
   };
 
-  // ✅ Filter + Search
   const filteredEvents = events.filter((event) => {
     const matchesStatus =
       filterStatus === "All" || event.type === filterStatus;
@@ -226,12 +224,10 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      {/* ✅ Toast Message */}
       {message && (
         <div
-          className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${
-            messageType === "success" ? "bg-green-600" : "bg-red-600"
-          }`}
+          className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${messageType === "success" ? "bg-green-600" : "bg-red-600"
+            }`}
         >
           {message}
         </div>
@@ -263,7 +259,6 @@ export default function EventsPage() {
           </div>
         </CardHeader>
 
-        {/* Table */}
         <CardContent>
           <Table>
             <TableHeader className="bg-gray-100">
@@ -330,7 +325,6 @@ export default function EventsPage() {
         </CardContent>
       </Card>
 
-      {/* 🔹 View Event */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogHeader>
           <DialogTitle>{selectedEvent?.name}</DialogTitle>
@@ -356,7 +350,6 @@ export default function EventsPage() {
         </DialogFooter>
       </Dialog>
 
-      {/* 🔹 Add Event */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogHeader>
           <DialogTitle>Add New Event</DialogTitle>
@@ -380,7 +373,6 @@ export default function EventsPage() {
         </DialogFooter>
       </Dialog>
 
-      {/* 🔹 Edit Event */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
@@ -404,7 +396,6 @@ export default function EventsPage() {
         </DialogFooter>
       </Dialog>
 
-      {/* 🔹 Delete Confirmation */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>

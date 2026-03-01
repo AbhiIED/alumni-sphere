@@ -1,11 +1,11 @@
 import React from 'react'
-import Navbar from '../component/Navbar'
-import Footer from '../component/Footer'
-import Connections from '../component/Connection'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import Connections from '../components/Connection'
 export default function ConnectionPage() {
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <Connections />
       <Footer />
     </>

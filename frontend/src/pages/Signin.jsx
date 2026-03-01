@@ -15,7 +15,8 @@ export default function Signin() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:5000/auth/signin", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -32,6 +33,9 @@ export default function Signin() {
         } else {
           navigate("/homepage");
         }
+      } else if (res.status === 403 && data.needsVerification) {
+        // Email not verified — redirect to OTP page
+        navigate("/verify-otp", { state: { email: data.email } });
       } else {
         setError(data.error || "Login failed");
       }
@@ -91,15 +95,7 @@ export default function Signin() {
               />
             </div>
 
-            <div className="text-right">
-              <button
-                type="button"
-                onClick={() => navigate("/forgot-password")}
-                className="text-sm text-indigo-700 hover:underline focus:outline-none"
-              >
-                Forgot Password?
-              </button>
-            </div>
+
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 

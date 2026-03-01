@@ -1,7 +1,7 @@
 import React from 'react'
-import PostForm from '../component/PostForm'
-import Navbar from '../component/Navbar'
-import Footer from '../component/Footer'
+import PostForm from '../components/PostForm'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 export default function CreatePost() {
   return (

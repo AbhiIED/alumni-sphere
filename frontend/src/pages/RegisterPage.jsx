@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Navbar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const RegisterPage = () => {
   const location = useLocation();
@@ -45,11 +45,11 @@ const RegisterPage = () => {
     <>
       <Navbar />
       <div
-        
+
         className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100 py-16 px-6 mt-6"
       >
         <div
-         
+
           className="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-10 border border-gray-200"
         >
           <h1 className="text-4xl font-bold text-center text-amber-800 mb-4">

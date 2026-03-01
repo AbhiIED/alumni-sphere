@@ -1,13 +1,13 @@
 import React from 'react'
-import Navbar from '../component/Navbar'
-import NewsSection from '../component/NewsSection'
-import Footer from '../component/Footer'
+import Navbar from '../components/Navbar'
+import NewsSection from '../components/NewsSection'
+import Footer from '../components/Footer'
 export default function NewsDetails() {
   return (
     <>
-    <Navbar/>
-    <NewsSection />
-    <Footer/>
+      <Navbar />
+      <NewsSection />
+      <Footer />
     </>
   )
 }

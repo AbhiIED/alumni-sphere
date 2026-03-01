@@ -3,9 +3,7 @@ const router = express.Router();
 const pool = require("../config/db");
 const { verifyAdmin } = require("../middleware/authMiddleware");
 
-/* ================================================================
-   1️⃣ GET ALL PROJECTS  (Admin OR frontend project listing)
-================================================================ */
+
 router.get("/projects", async (req, res) => {
   try {
     const [rows] = await pool.query(`
@@ -32,9 +30,6 @@ router.get("/projects", async (req, res) => {
   }
 });
 
-/* ================================================================
-   2️⃣ GET ALL DONATIONS (full donation log)
-================================================================ */
 router.get("/", async (req, res) => {
   try {
     const [rows] = await pool.query(`
@@ -64,9 +59,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/* ================================================================
-   3️⃣ GET ALL TRANSACTIONS FOR SPECIFIC PROJECT
-================================================================ */
+
 router.get("/:id/transactions", async (req, res) => {
   const { id } = req.params;
 
@@ -101,9 +94,7 @@ router.get("/:id/transactions", async (req, res) => {
   }
 });
 
-/* ================================================================
-   4️⃣ CREATE NEW PROJECT (ADMIN ONLY)
-================================================================ */
+
 router.post("/projects", verifyAdmin, async (req, res) => {
   try {
     const AdminUserID = req.user.id; // Admin ID from token
@@ -157,9 +148,7 @@ router.post("/projects", verifyAdmin, async (req, res) => {
   }
 });
 
-/* ================================================================
-   5️⃣ UPDATE PROJECT  (ADMIN ONLY)
-================================================================ */
+
 router.put("/projects/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
 
@@ -213,10 +202,7 @@ router.put("/projects/:id", verifyAdmin, async (req, res) => {
   }
 });
 
-/* ================================================================
-   6️⃣ DELETE PROJECT (ADMIN ONLY)
-   ⚠ MUST BE AT THE END to avoid route conflicts
-================================================================ */
+
 router.delete("/projects/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
 

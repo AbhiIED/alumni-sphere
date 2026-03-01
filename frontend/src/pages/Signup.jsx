@@ -50,12 +50,8 @@ export default function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
   const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-
+  const [isSuccess, setIsSuccess] = useState(false); // ✅ added
+  const navigate = useNavigate(); // ✅ added
   const currentYear = new Date().getFullYear();
   const isAlumni = formData.endYear && parseInt(formData.endYear, 10) < currentYear;
   const isStudent = formData.endYear && parseInt(formData.endYear, 10) >= currentYear;
@@ -168,7 +164,8 @@ export default function Signup() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("http://localhost:5000/auth/signup", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -176,18 +173,11 @@ export default function Signup() {
 
       const data = await response.json();
       if (response.ok) {
-        setIsSuccess(true);
-        setMessage("🎉 Your account has been created successfully!");
-        setFormData(initialFormData);
-        setOtp("");
-        setOtpSent(false);
-        setEmailVerified(false);
-
-        setTimeout(() => {
-          navigate("/signin");
-        }, 1500);
+        // Redirect to OTP verification page
+        navigate("/verify-otp", { state: { email: formData.email } });
       } else {
-        setErrorMessage(data.error || data.message || "❌ Signup failed. Please try again.");
+        setIsSuccess(false);
+        setMessage(data.error || "❌ Signup failed. Try again.");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -196,6 +186,10 @@ export default function Signup() {
       setIsSubmitting(false);
     }
   };
+
+
+
+
 
   return (
     <div className="min-h-screen w-full bg-gray-100 lg:grid lg:grid-cols-2">
@@ -207,19 +201,19 @@ export default function Signup() {
         </p>
       </div>
 
-      <div className="flex items-start justify-center p-6 sm:p-10 lg:max-h-screen lg:overflow-y-auto">
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Create Your Account</h2>
-          <p className="text-sm text-gray-500 text-center mb-6">Join the Alumni Sphere community.</p>
-
+      {/* RIGHT SIDE - Signup Form */}
+      <div className="w-1/2 bg-gray-100 flex items-center justify-center p-10 pt-80 overflow-y-auto">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 ">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+            Create Your Account
+          </h2>
           {message && (
             <div
-              className={`flex items-center gap-3 mt-4 mb-6 px-4 py-3 rounded-lg shadow-md text-sm font-medium
-              ${
-                isSuccess
+              className={`flex items-center gap-3 mt-4 mb-2 px-4 py-3 rounded-lg shadow-md text-sm font-medium
+      ${isSuccess
                   ? "bg-green-100 text-green-800 border border-green-300"
                   : "bg-red-100 text-red-800 border border-red-300"
-              }`}
+                }`}
             >
               {isSuccess ? (
                 <CheckCircleIcon className="h-5 w-5 text-green-600" />
@@ -227,6 +221,37 @@ export default function Signup() {
                 <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
               )}
               <span>{message}</span>
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+                e.preventDefault();
+              }
+            }}
+            className="space-y-6"
+          >
+            {/* Name */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <InputField
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+
+              <InputField
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
             </div>
           )}
 
@@ -290,41 +315,88 @@ export default function Signup() {
 
             {isStudent && (
               <>
-                <h3 className="text-lg font-semibold text-gray-700">Student Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <SelectBox name="currentYear" value={formData.currentYear} onChange={handleChange} required>
-                    <option value="">Select Year</option>
-                    <option value="1st">1st</option>
-                    <option value="2nd">2nd</option>
-                    <option value="3rd">3rd</option>
-                    <option value="4th">4th</option>
-                    <option value="5th">5th</option>
-                  </SelectBox>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Student Details
+                </h3>
+                <SelectBox
+                  name="currentYear"
+                  value={formData.currentYear}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Year</option>
+                  <option value="1st">1st</option>
+                  <option value="2nd">2nd</option>
+                  <option value="3rd">3rd</option>
+                  <option value="4th">4th</option>
+                  <option value="5th">5th</option>
+                </SelectBox>
 
-                  <SelectBox name="semester" value={formData.semester} onChange={handleChange} required disabled={!formData.currentYear}>
-                    <option value="">Select Semester</option>
-                    {formData.currentYear &&
-                      semesterOptions[formData.currentYear]?.map((sem) => (
-                        <option key={sem} value={sem}>
-                          {sem}
-                        </option>
-                      ))}
-                  </SelectBox>
-                </div>
+                <SelectBox
+                  name="semester"
+                  value={formData.semester}
+                  onChange={handleChange}
+                  required
+                  disabled={!formData.currentYear}
+                >
+                  <option value="">Select Semester</option>
+                  {formData.currentYear &&
+                    semesterOptions[formData.currentYear]?.map((sem) => (
+                      <option key={sem} value={sem}>
+                        {sem}
+                      </option>
+                    ))}
+                </SelectBox>
               </>
             )}
 
             {isAlumni && (
               <>
-                <h3 className="text-lg font-semibold text-gray-700">Alumni Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <InputField type="text" name="jobTitle" placeholder="Job Title" value={formData.jobTitle} onChange={handleChange} />
-                  <InputField type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} />
-                  <InputField type="text" name="city" placeholder="Current City" value={formData.city} onChange={handleChange} />
-                  <InputField type="text" name="country" placeholder="Country" value={formData.country} onChange={handleChange} />
-                  <InputField type="text" name="sector" placeholder="Sector (IT, Finance, etc.)" value={formData.sector} onChange={handleChange} />
-                  <InputField type="text" name="skills" placeholder="Skills (React, SQL, etc.)" value={formData.skills} onChange={handleChange} />
-                </div>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Alumni Details
+                </h3>
+                <InputField
+                  type="text"
+                  name="jobTitle"
+                  placeholder="Job Title"
+                  value={formData.jobTitle}
+                  onChange={handleChange}
+                />
+                <InputField
+                  type="text"
+                  name="companyName"
+                  placeholder="Company Name"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                />
+                <InputField
+                  type="text"
+                  name="city"
+                  placeholder="Current City"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+                <InputField
+                  type="text"
+                  name="country"
+                  placeholder="Country"
+                  value={formData.country}
+                  onChange={handleChange}
+                />
+                <InputField
+                  type="text"
+                  name="sector"
+                  placeholder="Sector (IT, Finance, etc.)"
+                  value={formData.sector}
+                  onChange={handleChange}
+                />
+                <InputField
+                  type="text"
+                  name="skills"
+                  placeholder="Skills (React, SQL, etc.)"
+                  value={formData.skills}
+                  onChange={handleChange}
+                />
               </>
             )}
 

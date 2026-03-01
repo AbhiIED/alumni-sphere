@@ -14,11 +14,7 @@ app.use(
   })
 );
 
-// ✅ Middleware
-app.use(cors({
-  origin: "http://localhost:5173", // your frontend (Vite default)
-  credentials: true
-}));
+
 app.use(express.json());
 
 // ✅ Serve uploaded files (e.g., profile pictures)

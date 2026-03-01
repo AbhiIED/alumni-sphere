@@ -1,7 +1,7 @@
 import React from "react";
-import Donations from "../component/Donations";
-import Navbar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Donations from "../components/Donations";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function DonationPage() {
   return (

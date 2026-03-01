@@ -5,7 +5,6 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
 
-// 💰 1️⃣ Fetch all donation projects
 router.get("/", async (req, res) => {
   try {
     const [rows] = await pool.query(`
@@ -26,7 +25,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 💳 2️⃣ Get Razorpay public key
 router.get("/get-key", (req, res) => {
   try {
     res.json({ key: process.env.RAZORPAY_KEY_ID });
@@ -36,7 +34,6 @@ router.get("/get-key", (req, res) => {
   }
 });
 
-// 💰 3️⃣ Fetch a single donation project by ID
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -67,13 +64,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// 💳 4️⃣ Initialize Razorpay
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// 💳 5️⃣ Create Razorpay order
 router.post("/create-order", async (req, res) => {
   try {
     const { amount } = req.body;
@@ -92,7 +87,6 @@ router.post("/create-order", async (req, res) => {
   }
 });
 
-// 💳 6️⃣ Verify Razorpay payment
 router.post("/verify-payment", (req, res) => {
   try {
     const { order_id, payment_id, signature } = req.body;

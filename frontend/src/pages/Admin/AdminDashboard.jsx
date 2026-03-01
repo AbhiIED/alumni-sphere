@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import AdminSidebar from "@/component/AdminSidebar";
+import AdminSidebar from "@/components/AdminSidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -9,7 +9,6 @@ export default function AdminDashboard() {
   const location = useLocation();
   const isDashboardHome = location.pathname === "/admin-dashboard";
 
-  // Dashboard Stats
   const [stats, setStats] = useState({
     totalAlumni: 0,
     activeStudents: 0,
@@ -19,21 +18,19 @@ export default function AdminDashboard() {
     totalDonationCount: 0,
   });
 
-  // Monthly Chart Data
   const [chartData, setChartData] = useState([]);
 
-  // Fetch Dashboard Stats
   const fetchStats = async () => {
     try {
-      const res = await fetch("http://localhost:5000/admin-dashboard/stats");
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/admin-dashboard/stats`);
       const data = await res.json();
       setStats(data);
 
-      // Generate sample chart data (You can replace with real monthly donation data)
       const generatedChart = [
-        { month: "Jan", value: data.totalDonationAmount * 0.00 },
-       
-        { month: "May", value: data.totalDonationAmount },
+        { month: "Oct", value: data.totalDonationAmount * 0.00 },
+
+        { month: "Nov", value: data.totalDonationAmount },
       ];
 
       setChartData(generatedChart);
@@ -48,22 +45,17 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      {/* Sidebar */}
       <AdminSidebar />
 
-      {/* Main Content */}
       <main className="flex-1 ml-64 p-8">
         {isDashboardHome ? (
           <>
-            {/* Header */}
             <header className="flex justify-between items-center mb-10">
               <h1 className="text-3xl font-semibold text-gray-800">Admin Dashboard</h1>
             </header>
 
-            {/* Stats Section */}
             <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
 
-              {/* Total Alumni */}
               <Card>
                 <CardHeader>
                   <CardTitle>Total Alumni</CardTitle>
@@ -75,7 +67,6 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Active Students */}
               <Card>
                 <CardHeader>
                   <CardTitle>Active Students</CardTitle>
@@ -87,7 +78,6 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Upcoming Events */}
               <Card>
                 <CardHeader>
                   <CardTitle>Upcoming Events</CardTitle>
@@ -99,7 +89,6 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Job Postings */}
               <Card>
                 <CardHeader>
                   <CardTitle>Job Postings</CardTitle>
@@ -111,7 +100,6 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
 
-              {/* ⭐ Total Donations */}
               <Card>
                 <CardHeader>
                   <CardTitle>Total Donations</CardTitle>
@@ -128,7 +116,6 @@ export default function AdminDashboard() {
 
             </section>
 
-            {/* Chart Section */}
             <section>
               <Card>
                 <CardHeader>
@@ -154,7 +141,7 @@ export default function AdminDashboard() {
             </section>
           </>
         ) : (
-          <Outlet /> // Renders child admin screens
+          <Outlet />
         )}
       </main>
     </div>

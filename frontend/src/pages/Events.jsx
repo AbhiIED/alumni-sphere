@@ -6,8 +6,8 @@ import {
   Autoplay,
   EffectCoverflow,
 } from "swiper/modules";
-import Navbar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import fallbackImage from "../Images/event-image.webp";
 
 
@@ -19,12 +19,19 @@ import "swiper/css/effect-coverflow";
 export default function EventSection() {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [expiredEvents, setExpiredEvents] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/events");
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        const res = await fetch(`${API_BASE_URL}/events`);
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch events: ${res.statusText}`);
+        }
+
         const data = await res.json();
 
         if (Array.isArray(data)) {
@@ -40,14 +47,43 @@ export default function EventSection() {
 
           setUpcomingEvents(upcoming);
           setExpiredEvents(expired);
+        } else {
+          setError("Invalid data format received");
         }
       } catch (err) {
         console.error("Error fetching events:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEvents();
   }, []);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex justify-center items-center text-lg">
+          Loading events...
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex justify-center items-center text-red-600 text-lg">
+          Error: {error}
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
