@@ -50,8 +50,8 @@ export default function Signup() {
   });
 
   const [message, setMessage] = useState("");
-const [isSuccess, setIsSuccess] = useState(false); // ✅ added
-const navigate = useNavigate(); // ✅ added
+  const [isSuccess, setIsSuccess] = useState(false); // ✅ added
+  const navigate = useNavigate(); // ✅ added
   const currentYear = new Date().getFullYear();
   const isAlumni = formData.endYear && parseInt(formData.endYear) < currentYear;
   const isStudent = formData.endYear && parseInt(formData.endYear) >= currentYear;
@@ -77,7 +77,8 @@ const navigate = useNavigate(); // ✅ added
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/auth/signup", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -85,46 +86,21 @@ const navigate = useNavigate(); // ✅ added
 
       const data = await response.json();
       if (response.ok) {
-  setIsSuccess(true);
-  setMessage("🎉 Your account has been created successfully!");
-  setFormData({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    scholarId: "",
-    email: "",
-    primaryPhone: "",
-    secondaryPhone: "",
-    department: "",
-    branch: "",
-    endYear: "",
-    currentYear: "",
-    semester: "",
-    jobTitle: "",
-    companyName: "",
-    city: "",
-    country: "",
-    sector: "",
-    skills: "",
-    address: "",
-    password: "",
-  });
-
-  // ✅ Redirect after 2s
-  setTimeout(() => {
-    navigate("/signin");
-  }, 2000);
-} else {
-  setIsSuccess(false);
-  setMessage(data.message || "❌ Signup failed. Please try again.");
-}
-
+        // Redirect to OTP verification page
+        navigate("/verify-otp", { state: { email: formData.email } });
+      } else {
+        setIsSuccess(false);
+        setMessage(data.error || "❌ Signup failed. Try again.");
+      }
     } catch (error) {
       console.error("Error:", error);
       setIsSuccess(false);
       setMessage("⚠️ Server error. Please try later.");
     }
   };
+
+
+
 
 
   return (
@@ -151,22 +127,22 @@ const navigate = useNavigate(); // ✅ added
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
             Create Your Account
           </h2>
-{message && (
-  <div
-    className={`flex items-center gap-3 mt-4 mb-2 px-4 py-3 rounded-lg shadow-md text-sm font-medium
-      ${isSuccess 
-        ? "bg-green-100 text-green-800 border border-green-300" 
-        : "bg-red-100 text-red-800 border border-red-300"
-      }`}
-  >
-    {isSuccess ? (
-      <CheckCircleIcon className="h-5 w-5 text-green-600" />
-    ) : (
-      <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
-    )}
-    <span>{message}</span>
-  </div>
-)}
+          {message && (
+            <div
+              className={`flex items-center gap-3 mt-4 mb-2 px-4 py-3 rounded-lg shadow-md text-sm font-medium
+      ${isSuccess
+                  ? "bg-green-100 text-green-800 border border-green-300"
+                  : "bg-red-100 text-red-800 border border-red-300"
+                }`}
+            >
+              {isSuccess ? (
+                <CheckCircleIcon className="h-5 w-5 text-green-600" />
+              ) : (
+                <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
+              )}
+              <span>{message}</span>
+            </div>
+          )}
 
           <form
             onSubmit={handleSubmit}
@@ -187,7 +163,7 @@ const navigate = useNavigate(); // ✅ added
                 onChange={handleChange}
                 required
               />
-              
+
               <InputField
                 type="text"
                 name="lastName"
@@ -283,9 +259,9 @@ const navigate = useNavigate(); // ✅ added
             {/* Student Section */}
             {isStudent && (
               <>
-               <h3 className="text-lg font-semibold text-gray-700">
-                Alumni Details
-              </h3>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Student Details
+                </h3>
                 <SelectBox
                   name="currentYear"
                   value={formData.currentYear}
@@ -321,9 +297,9 @@ const navigate = useNavigate(); // ✅ added
             {/* Alumni Section */}
             {isAlumni && (
               <>
-               <h3 className="text-lg font-semibold text-gray-700">
-                Alumni Details
-              </h3>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Alumni Details
+                </h3>
                 <InputField
                   type="text"
                   name="jobTitle"

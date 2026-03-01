@@ -24,7 +24,6 @@ router.get("/", verifyToken, async (req, res) => {
       [currentUserId]
     );
 
-    // Generate full URLs
     const alumni = rows.map((row) => ({
       name: `${row.User_Fname} ${row.User_Lname}`,
       course: `${row.Course} ${row.Graduation_Year}`,

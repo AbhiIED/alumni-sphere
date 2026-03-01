@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../config/db");
 
-/* ===========================================================
-   GET ALL JOBS
-   =========================================================== */
+
 router.get("/", async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -21,9 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/* ===========================================================
-   POST A NEW JOB
-   =========================================================== */
+
 router.post("/", async (req, res) => {
   try {
     const {
@@ -79,20 +75,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-/* ===========================================================
-   DELETE JOB BY ID
-   =========================================================== */
+
 router.delete("/:id", async (req, res) => {
   try {
     const jobId = req.params.id;
 
-    // Delete job by ID
     const [result] = await pool.query(
       "DELETE FROM Job_Postings WHERE Job_ID = ?",
       [jobId]
     );
 
-    // If no rows deleted → job doesn't exist
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Job not found." });
     }

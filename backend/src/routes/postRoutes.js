@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../config/db");
 const { verifyToken } = require("../middleware/authMiddleware"); // ✅ FIXED
 
-// ✅ Fetch All Posts
+// Fetch All Posts
 router.get("/", verifyToken, async (req, res) => {
   try {
     const [posts] = await db.query(`
@@ -64,7 +64,6 @@ router.get("/:postId/comments", verifyToken, async (req, res) => {
   }
 });
 
-// ✅ Add a Comment
 router.post("/:postId/comments", verifyToken, async (req, res) => {
   const { postId } = req.params;
   const { commentText } = req.body;
@@ -129,15 +128,12 @@ router.post("/:postId/like", verifyToken, async (req, res) => {
   }
 });
 
-// ✅ Delete a Post
 router.delete("/:postId", verifyToken, async (req, res) => {
   const { postId } = req.params;
 
   try {
-    // Delete comments first (FK constraint)
     await db.query("DELETE FROM Post_Comment WHERE Post_ID = ?", [postId]);
 
-    // Then delete the post
     const [result] = await db.query("DELETE FROM Post WHERE Post_ID = ?", [postId]);
 
     if (result.affectedRows === 0) {

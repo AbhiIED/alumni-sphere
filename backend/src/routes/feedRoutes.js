@@ -6,11 +6,9 @@ const fs = require("fs");
 const db = require("../config/db");
 const { verifyToken } = require("../middleware/authMiddleware"); // ✅ FIXED
 
-// ✅ Ensure upload directory exists
 const uploadDir = path.join(__dirname, "../uploads/post_images");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
-// ✅ Configure multer for post images
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) =>
@@ -18,7 +16,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ Create new post
 router.post("/", verifyToken, upload.single("image"), async (req, res) => {
   const { content } = req.body;
   const userId = req.user.id;

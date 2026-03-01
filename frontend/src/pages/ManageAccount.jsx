@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../component/Navbar";
-import Footer from "../component/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function ManageAccount() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function ManageAccount() {
     confirmPassword: "",
   });
   const [showPasswordFields, setShowPasswordFields] = useState(false);
-  const [toast, setToast] = useState(null); 
+  const [toast, setToast] = useState(null);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -52,7 +52,8 @@ export default function ManageAccount() {
       }
 
       try {
-        const res = await fetch("http://localhost:5000/api/user/profile", {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        const res = await fetch(`${API_BASE_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -99,7 +100,8 @@ export default function ManageAccount() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/user/upload-pic", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/api/user/upload-pic`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -108,9 +110,10 @@ export default function ManageAccount() {
       const data = await res.json();
 
       if (res.ok) {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
         setUser((prev) => ({
           ...prev,
-          profilePic: `http://localhost:5000${data.imagePath}`,
+          profilePic: `${API_BASE_URL}${data.imagePath}`,
         }));
         showToast("Profile picture updated!", "success");
       } else {
@@ -125,7 +128,8 @@ export default function ManageAccount() {
   const handleSave = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:5000/api/user/update-settings", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/api/user/update-settings`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +165,8 @@ export default function ManageAccount() {
 
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:5000/api/user/change-password", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/api/user/change-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -200,9 +205,8 @@ export default function ManageAccount() {
 
       {toast && (
         <div
-          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-md text-white z-50 transition-all duration-300 ${
-            toast.type === "success" ? "bg-green-600" : "bg-red-600"
-          }`}
+          className={`fixed top-4 right-4 px-4 py-2 rounded-lg shadow-md text-white z-50 transition-all duration-300 ${toast.type === "success" ? "bg-green-600" : "bg-red-600"
+            }`}
         >
           {toast.message}
         </div>
@@ -223,14 +227,12 @@ export default function ManageAccount() {
                   onClick={() =>
                     setProfileType(profileType === "public" ? "private" : "public")
                   }
-                  className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors ${
-                    profileType === "public" ? "bg-amber-600" : "bg-gray-400"
-                  }`}
+                  className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors ${profileType === "public" ? "bg-amber-600" : "bg-gray-400"
+                    }`}
                 >
                   <div
-                    className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
-                      profileType === "public" ? "translate-x-7" : ""
-                    }`}
+                    className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${profileType === "public" ? "translate-x-7" : ""
+                      }`}
                   />
                 </button>
               </div>

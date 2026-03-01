@@ -1,5 +1,5 @@
 const pool = require("../config/db");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 
 exports.getUserProfile = async (req, res) => {
@@ -28,7 +28,7 @@ exports.getUserProfile = async (req, res) => {
     );
 
 
-    
+
     if (!rows.length) return res.status(404).json({ error: "User not found" });
 
     const user = rows[0];
@@ -36,7 +36,7 @@ exports.getUserProfile = async (req, res) => {
     if (user.profilePic) {
       user.profilePic = `http://localhost:5000${user.profilePic}`;
     } else {
-      user.profilePic = ""; 
+      user.profilePic = "";
     }
 
     res.json(user);

@@ -1,17 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../config/db");
-const { verifyAdmin } = require("../middleware/authMiddleware"); // ✅ Admin token verification
+const { verifyAdmin } = require("../middleware/authMiddleware"); //  Admin token verification
 
-/**
- * ===============================================
- * 🟢 PUBLIC ROUTES (For Users, Students, Alumni)
- * ===============================================
- */
 
-// ✅ Get all or latest events (already implemented)
 router.get("/", async (req, res) => {
-  const type = req.query.type; // "latest" optional
+  const type = req.query.type; 
 
   let query = `
     SELECT 
@@ -26,10 +20,8 @@ router.get("/", async (req, res) => {
     FROM Event_Table e
   `;
 if (type === "latest") {
-  // Show only the latest created events
   query += ` ORDER BY e.Creation_Date DESC LIMIT 5;`;
 } else {
-  // ✅ Upcoming events first, past ones after
   query += `
     ORDER BY
       CASE
@@ -42,7 +34,6 @@ if (type === "latest") {
 
   try {
     const [rows] = await pool.query(query);
-    //console.log("📦 All Events:", rows);
     res.json(rows);
   } catch (err) {
     console.error("❌ Error fetching events:", err);
@@ -50,7 +41,6 @@ if (type === "latest") {
   }
 });
 
-// ✅ Get single event by ID (for event details page)
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -65,16 +55,9 @@ router.get("/:id", async (req, res) => {
 
 
 
-/**
- * ===============================================
- * 🔒 ADMIN ROUTES (Protected with verifyAdmin)
- * ===============================================
- */
 
-// ✅ Create a new event
 router.post("/", verifyAdmin, async (req, res) => {
   try {
-    // ✅ Organizer_ID comes from the logged-in admin (decoded from JWT)
     const Organizer_ID = req.user.id;
 
 
@@ -94,7 +77,6 @@ router.post("/", verifyAdmin, async (req, res) => {
       Event_Image,
     } = req.body;
 
-    // ✅ Only check what the frontend must send
     if (!Event_ID || !Event_Name || !Event_Date) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -126,7 +108,7 @@ router.post("/", verifyAdmin, async (req, res) => {
 });
 
 
-// ✅ Update event
+//Update event
 router.put("/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
@@ -144,7 +126,7 @@ router.put("/:id", verifyAdmin, async (req, res) => {
   }
 });
 
-// ✅ Delete event
+// Delete event
 router.delete("/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
 

@@ -28,10 +28,10 @@ export default function UsersPage() {
 
   const token = localStorage.getItem("token");
 
-  // ✅ Fetch Users
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/users", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -45,10 +45,10 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  // ✅ View single user
   const handleViewUser = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/users/${id}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -59,10 +59,10 @@ export default function UsersPage() {
     }
   };
 
-  // ✅ Delete User
   const handleDeleteUser = async (id) => {
     try {
-      await fetch(`http://localhost:5000/users/${id}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      await fetch(`${API_BASE_URL}/users/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -73,7 +73,6 @@ export default function UsersPage() {
     }
   };
 
-  // ✅ Add Admin
   const handleAddAdmin = async () => {
     if (!newAdmin.fname || !newAdmin.lname || !newAdmin.email || !newAdmin.password || !newAdmin.confirmPassword)
       return alert("Please fill all fields");
@@ -81,7 +80,8 @@ export default function UsersPage() {
       return alert("Passwords do not match");
 
     try {
-      const res = await fetch("http://localhost:5000/users/add-admin", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/users/add-admin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -196,7 +196,6 @@ export default function UsersPage() {
         </CardContent>
       </Card>
 
-      {/* View Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
@@ -224,7 +223,6 @@ export default function UsersPage() {
         </DialogFooter>
       </Dialog>
 
-      {/* Delete Confirmation */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
@@ -238,7 +236,6 @@ export default function UsersPage() {
         </DialogFooter>
       </Dialog>
 
-      {/* Add Admin Dialog */}
       <Dialog open={showAddAdminDialog} onOpenChange={setShowAddAdminDialog}>
         <DialogHeader>
           <DialogTitle>Add New Admin</DialogTitle>

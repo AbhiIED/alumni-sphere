@@ -25,7 +25,8 @@ export default function JobsPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("http://localhost:5000/jobs-api");
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        const res = await fetch(`${API_BASE_URL}/jobs-api`);
         const data = await res.json();
 
         const today = new Date();
@@ -58,32 +59,33 @@ export default function JobsPage() {
   }, [message]);
 
   // DELETE FUNCTION
- const confirmDelete = async () => {
-  try {
-    const res = await fetch(`http://localhost:5000/jobs-api/${jobToDelete.id}`, {
-      method: "DELETE",
-    });
+  const confirmDelete = async () => {
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/jobs-api/${jobToDelete.id}`, {
+        method: "DELETE",
+      });
 
-    const result = await res.json();
+      const result = await res.json();
 
-    if (!res.ok) {
-      setMessage("Failed to delete job.");
+      if (!res.ok) {
+        setMessage("Failed to delete job.");
+        setMessageType("error");
+        return;
+      }
+
+      setJobs((prev) => prev.filter((job) => job.id !== jobToDelete.id));
+
+      setMessage(result.message);
+      setMessageType("success");
+      setShowDeleteDialog(false);
+
+    } catch (err) {
+      console.error(err);
+      setMessage("Error deleting job.");
       setMessageType("error");
-      return;
     }
-
-    setJobs((prev) => prev.filter((job) => job.id !== jobToDelete.id));
-
-    setMessage(result.message);
-    setMessageType("success");
-    setShowDeleteDialog(false);
-
-  } catch (err) {
-    console.error(err);
-    setMessage("Error deleting job.");
-    setMessageType("error");
-  }
-};
+  };
 
 
   const handleDownloadPDF = (job) => {
@@ -109,7 +111,7 @@ export default function JobsPage() {
   );
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-const [jobToDelete, setJobToDelete] = useState(null);
+  const [jobToDelete, setJobToDelete] = useState(null);
 
 
   return (
@@ -117,9 +119,8 @@ const [jobToDelete, setJobToDelete] = useState(null);
 
       {message && (
         <div
-          className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${
-            messageType === "success" ? "bg-green-600" : "bg-red-600"
-          }`}
+          className={`fixed top-6 right-6 z-50 rounded-xl shadow-lg px-6 py-4 text-white font-medium transition-all duration-500 ${messageType === "success" ? "bg-green-600" : "bg-red-600"
+            }`}
         >
           {message}
         </div>
@@ -178,16 +179,16 @@ const [jobToDelete, setJobToDelete] = useState(null);
                           View
                         </Button>
 
-                       <Button
-  size="sm"
-  variant="destructive"
-  onClick={() => {
-    setJobToDelete(job);
-    setShowDeleteDialog(true);
-  }}
->
-  Delete
-</Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => {
+                            setJobToDelete(job);
+                            setShowDeleteDialog(true);
+                          }}
+                        >
+                          Delete
+                        </Button>
 
                       </div>
                     </TableCell>
@@ -206,23 +207,23 @@ const [jobToDelete, setJobToDelete] = useState(null);
       </Card>
 
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-  <DialogHeader>
-    <DialogTitle>Confirm Deletion</DialogTitle>
-    <DialogDescription>
-      Are you sure you want to delete <strong>{jobToDelete?.title}</strong>?
-      This action cannot be undone.
-    </DialogDescription>
-  </DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete <strong>{jobToDelete?.title}</strong>?
+            This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
 
-  <DialogFooter>
-    <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
-      Cancel
-    </Button>
-    <Button variant="destructive" onClick={confirmDelete}>
-      Delete
-    </Button>
-  </DialogFooter>
-</Dialog>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </Dialog>
 
 
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>

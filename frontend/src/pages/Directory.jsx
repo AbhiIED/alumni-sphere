@@ -1,6 +1,6 @@
-import AlumniList from "../component/AlumniList";
-import Footer from "../component/Footer";
-import Navbar from "../component/Navbar";
+import AlumniList from "../components/AlumniList";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 const Directory = () => {
   return (
     <>
@@ -10,7 +10,7 @@ const Directory = () => {
           Alumni Directory
         </h1>
         <p className="text-gray-600 text-center mb-10">
-          
+
           Explore and connect with alumni across different years and fields.
         </p>
 

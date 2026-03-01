@@ -1,13 +1,14 @@
 const pool = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { generateOTP, storeOTP, verifyOTP, storeResetOTP, verifyResetOTP } = require("../utils/otpStore");
+const { sendOTPEmail, sendPasswordResetOTPEmail } = require("../utils/emailService");
 
 // SIGNIN
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // ✅ Join User_Table with User_Type_Table
     const [rows] = await pool.query(
       `SELECT u.*, ut.User_Type_name 
        FROM User_Table u 
@@ -27,10 +28,22 @@ exports.signin = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    //Include role info in token
+    // Check if email is verified
+    if (!user.Is_Verified) {
+      return res.status(403).json({
+        error: "Please verify your email before signing in.",
+        needsVerification: true,
+        email: user.Email_ID,
+      });
+    }
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not defined in environment variables");
+    }
+
     const token = jwt.sign(
       { id: user.User_ID, email: user.Email_ID, role: user.User_Type_ID },
-      process.env.JWT_SECRET || "secret123",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -49,6 +62,10 @@ exports.signin = async (req, res) => {
 
 
 //SIGNUP
+const ROLES = {
+  ALUMNI: 1,
+  STUDENT: 2
+};
 
 exports.signup = async (req, res) => {
   try {
@@ -74,46 +91,205 @@ exports.signup = async (req, res) => {
       branch
     } = req.body;
 
+    // Check if email already exists
+    const [existing] = await pool.query(
+      "SELECT User_ID FROM User_Table WHERE Email_ID = ?",
+      [email]
+    );
+    if (existing.length > 0) {
+      return res.status(409).json({ error: "Email already registered" });
+    }
+
     const currentYear = new Date().getFullYear();
-    let userTypeId = 2; 
+    let userTypeId = ROLES.STUDENT;
     if (endYear && parseInt(endYear) < currentYear) {
-      userTypeId = 1; 
+      userTypeId = ROLES.ALUMNI;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await pool.query(
       `INSERT INTO User_Table 
-        (User_Type_ID, User_Fname, User_Lname, Gender, Phone_no, Phone_no_2, Email_ID, Password, Address) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (User_Type_ID, User_Fname, User_Lname, Gender, Phone_no, Phone_no_2, Email_ID, Password, Address, Is_Verified) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)`,
       [userTypeId, firstName, lastName, gender, primaryPhone, secondaryPhone, email, hashedPassword, address]
     );
 
     const userId = result.insertId;
 
-    if (userTypeId === 2) {
+    if (userTypeId === ROLES.STUDENT) {
       await pool.query(
-        `INSERT INTO Student_Table (User_ID, Scholar_No, Department, Course, Current_Year, Graduation_Year) 
+        `INSERT INTO Student_Table (Scholar_No, User_ID, Department, Course, Current_Year, Graduation_Year) 
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [userId, scholarId, department, branch, startYear, endYear]
+        [scholarId, userId, department, branch, 2025, endYear]
       );
-    } else if (userTypeId === 1) {
-      const alumniId = Math.floor(10000 + Math.random() * 90000); 
+    } else if (userTypeId === ROLES.ALUMNI) {
+      const alumniId = Math.floor(10000 + Math.random() * 90000);
 
-await pool.query(
-  `INSERT INTO Alumni_Table (
+      await pool.query(
+        `INSERT INTO Alumni_Table (
     Alumni_ID, User_ID, Enrollment_No, Department, Course, Graduation_Year,
     Job_Title, Company_Name, Current_City, Current_Country, Sector, Skills
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-  [alumniId, userId, scholarId, department, branch, endYear, jobTitle, companyName, city, country, sector, skills]
-);
-
-
+        [alumniId, userId, scholarId, department, branch, endYear, jobTitle, companyName, city, country, sector, skills]
+      );
     }
 
-    res.status(201).json({ message: "User registered successfully", userId });
+    // Generate and send OTP
+    const otp = generateOTP();
+    storeOTP(email, otp);
+    await sendOTPEmail(email, otp);
+
+    res.status(201).json({
+      message: "Registration successful! Please check your email for the verification code.",
+      userId,
+      email,
+      needsVerification: true,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
+  }
+};
+
+// VERIFY EMAIL
+exports.verifyEmail = async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({ error: "Email and OTP are required" });
+  }
+
+  try {
+    const result = verifyOTP(email, otp);
+    if (!result.valid) {
+      return res.status(400).json({ error: result.reason });
+    }
+
+    // Mark user as verified
+    await pool.query(
+      "UPDATE User_Table SET Is_Verified = 1 WHERE Email_ID = ?",
+      [email]
+    );
+
+    res.json({ message: "Email verified successfully! You can now sign in." });
+  } catch (err) {
+    console.error("Verify email error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// RESEND OTP
+exports.resendOTP = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    // Check if user exists and is not already verified
+    const [rows] = await pool.query(
+      "SELECT User_ID, Is_Verified FROM User_Table WHERE Email_ID = ?",
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (rows[0].Is_Verified) {
+      return res.status(400).json({ error: "Email is already verified" });
+    }
+
+    const otp = generateOTP();
+    storeOTP(email, otp);
+    await sendOTPEmail(email, otp);
+
+    res.json({ message: "A new verification code has been sent to your email." });
+  } catch (err) {
+    console.error("Resend OTP error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// SEND OTP (for forgot password)
+exports.sendOTP = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    const [rows] = await pool.query(
+      "SELECT User_ID FROM User_Table WHERE Email_ID = ?",
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const otp = generateOTP();
+    storeResetOTP(email, otp);
+    await sendPasswordResetOTPEmail(email, otp);
+
+    res.json({ message: "OTP sent to your email." });
+  } catch (err) {
+    console.error("Send OTP error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// VERIFY OTP (for forgot password - validates before password reset step)
+exports.verifyOTP = async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({ error: "Email and OTP are required" });
+  }
+
+  try {
+    const result = verifyResetOTP(email, otp, false);
+    if (!result.valid) {
+      return res.status(400).json({ error: result.reason });
+    }
+
+    res.json({ message: "OTP verified. Please set your new password." });
+  } catch (err) {
+    console.error("Verify OTP error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// RESET PASSWORD (forgot password flow)
+exports.resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  if (!email || !otp || !newPassword) {
+    return res.status(400).json({ error: "Email, OTP, and new password are required" });
+  }
+
+  try {
+    const result = verifyResetOTP(email, otp, true);
+    if (!result.valid) {
+      return res.status(400).json({ error: result.reason });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const [result2] = await pool.query(
+      "UPDATE User_Table SET Password = ? WHERE Email_ID = ?",
+      [hashedPassword, email]
+    );
+
+    if (result2.affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ message: "Password reset successfully!" });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

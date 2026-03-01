@@ -33,7 +33,6 @@ import {
 function WideDialogContent({ children }) {
   return (
     <DialogContent
-      // important: force wide sizes via utility classes & inline styles (tailwind !important not required)
       className="!w-[92vw] !max-w-[1300px] !h-[85vh] flex flex-col rounded-2xl overflow-hidden bg-white shadow-2xl border"
       style={{
         position: "fixed",
@@ -50,7 +49,6 @@ function WideDialogContent({ children }) {
   );
 }
 
-/** Simple Toast component */
 function Toast({ message, type = "success", onClose }) {
   const bg = type === "success" ? "bg-green-600" : "bg-red-600";
   useEffect(() => {
@@ -71,7 +69,7 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [transactions, setTransactions] = useState([]);
 
-  // Dialog state
+
   const [showTransactionDialog, setShowTransactionDialog] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -104,16 +102,12 @@ export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
-  // toast
   const [toast, setToast] = useState({ msg: null, type: "success" });
 
-  // category list (customize as needed)
   const categories = ["Education", "Health", "Environment", "Welfare", "Infrastructure", "Other"];
 
-  // ------------ Helpers & API calls ------------
-  const API_BASE = "http://localhost:5000"; // adjust if different
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
-  // Normalizer - converts returned project objects into consistent shape
   const normalizeProjects = (data = []) =>
     data.map((p) => ({
       id: p.id ?? p.Project_ID ?? p.projectId,
@@ -153,13 +147,11 @@ export default function ProjectsPage() {
     try {
       const res = await fetch(`${API_BASE}/admin-projects/${projectId}/transactions`);
       if (!res.ok) {
-        // if 404 or empty result, set empty list
         console.warn("Transactions fetch failed", res.status);
         setTransactions([]);
         return;
       }
       const data = await res.json();
-      // normalize Payment_Time field if necessary
       const normalized = data.map((t) => ({
         ...t,
         Payment_Time: t.Payment_Time ?? t.paymentTime ?? t.Payment_Time,
@@ -172,14 +164,12 @@ export default function ProjectsPage() {
     }
   };
 
-  // open transactions dialog
   const handleViewTransactions = async (project) => {
     setSelectedProject(project);
     await fetchTransactions(project.id);
     setShowTransactionDialog(true);
   };
 
-  // Create new project
   const handleAddProject = async () => {
     if (!newProject.title || !newProject.target || !newProject.category) {
       setToast({ msg: "Please fill required fields", type: "error" });
@@ -222,7 +212,6 @@ export default function ProjectsPage() {
     }
   };
 
-  // Open edit dialog and load data
   const openEditDialog = (project) => {
     setEditData({
       id: project.id,
@@ -232,7 +221,7 @@ export default function ProjectsPage() {
       category: project.category,
       image: project.image,
       status: project.status,
-      raised: project.raised,  
+      raised: project.raised,
       startDate: project.startDate ?? "",
       endDate: project.endDate ?? "",
     });
@@ -240,52 +229,50 @@ export default function ProjectsPage() {
     setShowEditDialog(true);
   };
 
-  // Save edited project (PUT)
   const handleEditSave = async () => {
-  const id = editData.id;
-  if (!id) {
-    setToast({ msg: "Missing project id", type: "error" });
-    return;
-  }
-
-  // Convert empty strings into NULL
-  const safeDate = (d) => (d && d.trim() !== "" ? d : null);
-
-  const payload = {
-    Project_title: editData.title,
-    Project_Description: editData.description,
-    Funds_Required: Number(editData.target),
-    Fund_Raised: Number(editData.raised),  // MUST come from existing project
-    Category: editData.category,
-    Image: editData.image || null,
-    Project_Status: editData.status || "Ongoing",
-    Start_Date: safeDate(editData.startDate),
-    End_Date: safeDate(editData.endDate),
-  };
-
-  try {
-    const res = await fetch(`${API_BASE}/admin-projects/projects/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...getAuthHeaders(),
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      throw new Error(errBody.error || "Failed to update project");
+    const id = editData.id;
+    if (!id) {
+      setToast({ msg: "Missing project id", type: "error" });
+      return;
     }
 
-    setToast({ msg: "Project updated", type: "success" });
-    setShowEditDialog(false);
-    await fetchProjects();
-  } catch (err) {
-    console.error("Update error", err);
-    setToast({ msg: err.message || "Failed to update", type: "error" });
-  }
-};
+    const safeDate = (d) => (d && d.trim() !== "" ? d : null);
+
+    const payload = {
+      Project_title: editData.title,
+      Project_Description: editData.description,
+      Funds_Required: Number(editData.target),
+      Fund_Raised: Number(editData.raised),
+      Category: editData.category,
+      Image: editData.image || null,
+      Project_Status: editData.status || "Ongoing",
+      Start_Date: safeDate(editData.startDate),
+      End_Date: safeDate(editData.endDate),
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/admin-projects/projects/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || "Failed to update project");
+      }
+
+      setToast({ msg: "Project updated", type: "success" });
+      setShowEditDialog(false);
+      await fetchProjects();
+    } catch (err) {
+      console.error("Update error", err);
+      setToast({ msg: err.message || "Failed to update", type: "error" });
+    }
+  };
 
 
   // Delete project
@@ -338,7 +325,6 @@ export default function ProjectsPage() {
     doc.save(`${(project?.title || "project")}_Report.pdf`);
   };
 
-  // ------------ Filtering ------------
   const filteredProjects = projects.filter((p) => {
     const q = searchQuery.trim().toLowerCase();
     const matchesSearch = !q || (p.title || "").toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q);
@@ -349,7 +335,6 @@ export default function ProjectsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  // UI helpers
   const clearToast = () => setToast({ msg: null, type: "success" });
 
   return (
@@ -475,7 +460,6 @@ export default function ProjectsPage() {
         </CardContent>
       </Card>
 
-      {/* TRANSACTIONS DIALOG */}
       <Dialog open={showTransactionDialog} onOpenChange={setShowTransactionDialog}>
         <WideDialogContent>
           <DialogHeader className="flex-shrink-0 border-b pb-3 bg-gray-50">
@@ -535,7 +519,6 @@ export default function ProjectsPage() {
         </WideDialogContent>
       </Dialog>
 
-      {/* VIEW PROJECT DIALOG */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <WideDialogContent>
           <DialogHeader className="flex-shrink-0 border-b pb-3 bg-gray-50">
@@ -573,7 +556,6 @@ export default function ProjectsPage() {
         </WideDialogContent>
       </Dialog>
 
-      {/* EDIT PROJECT DIALOG */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <WideDialogContent>
           <DialogHeader className="flex-shrink-0 border-b pb-3 bg-gray-50">
@@ -639,7 +621,6 @@ export default function ProjectsPage() {
         </WideDialogContent>
       </Dialog>
 
-      {/* ADD PROJECT DIALOG */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <WideDialogContent>
           <DialogHeader className="flex-shrink-0 border-b pb-3 bg-gray-50">
@@ -696,7 +677,6 @@ export default function ProjectsPage() {
         </WideDialogContent>
       </Dialog>
 
-      {/* DELETE CONFIRM DIALOG */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <WideDialogContent>
           <DialogHeader className="flex-shrink-0 border-b pb-3 bg-gray-50">
